@@ -11,7 +11,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = os.environ.get('SECRET_KEY')
 if not SECRET_KEY:
-    SECRET_KEY = ''.join(random.choice(string.ascii_lowercase) for i in range(32))
+    SECRET_KEY = ''.join(random.choice(string.ascii_lowercase) for i in range(32)) # noqa
 
 DEBUG = 'RENDER' not in os.environ
 
