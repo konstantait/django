@@ -1,9 +1,8 @@
 import os
-import random
-import string
 
 from pathlib import Path
 from dotenv import load_dotenv
+from django.core.management.utils import get_random_secret_key
 
 load_dotenv()
 
@@ -11,7 +10,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = os.environ.get('SECRET_KEY')
 if not SECRET_KEY:
-    SECRET_KEY = ''.join(random.choice(string.ascii_lowercase) for i in range(32)) # noqa
+    SECRET_KEY = get_random_secret_key() # noqa
 
 DEBUG = 'RENDER' not in os.environ
 
