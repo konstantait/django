@@ -6,7 +6,8 @@ from core.mixins.models import \
     BaseDateAddedModified, \
     BaseImageStatusSortOrder, \
     BaseDescription
-from core.constants import  MAX_DIGITS, DECIMAL_PLACES
+from core.constants import MAX_DIGITS, DECIMAL_PLACES
+
 
 class Language(BaseUUID,
                BaseImageStatusSortOrder):
@@ -25,8 +26,10 @@ class Category(BaseUUID,
 
 class CategoryDescription(BaseUUID, BaseDescription):
 
-    category = models.ForeignKey(Category, blank=True, on_delete=models.CASCADE)
-    language = models.ForeignKey(Language, blank=True, on_delete=models.CASCADE)
+    category = models.ForeignKey(Category,
+                                 blank=True, on_delete=models.CASCADE)
+    language = models.ForeignKey(Language,
+                                 blank=True, on_delete=models.CASCADE)
 
 
 class Product(BaseUUID,
@@ -44,8 +47,10 @@ class Product(BaseUUID,
 
 
 class ProductDescription(BaseUUID, BaseDescription):
-    product = models.ForeignKey(Product, blank=True, on_delete=models.CASCADE)
-    language = models.ForeignKey(Language, blank=True, on_delete=models.CASCADE)
+    product = models.ForeignKey(Product,
+                                blank=True, on_delete=models.CASCADE)
+    language = models.ForeignKey(Language,
+                                 blank=True, on_delete=models.CASCADE)
 
 
 class Discount(BaseUUID):
@@ -59,4 +64,3 @@ class Discount(BaseUUID):
     type = models.PositiveSmallIntegerField(
         choices=DiscountType.choices,
         default=DiscountType.CASH)
-
