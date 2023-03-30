@@ -38,6 +38,8 @@ class Product(BaseUUID,
 
     model = models.CharField(max_length=64)
     sku = models.CharField(max_length=64)
+    categories = models.ManyToManyField(Category, blank=True)
+    products = models.ManyToManyField('store.Product', blank=True)
     price = models.DecimalField(
         validators=[MinValueValidator(0)],
         max_digits=MAX_DIGITS,
