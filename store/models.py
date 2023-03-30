@@ -1,13 +1,14 @@
 from django.db import models
 
-# Create your models here.
+from core.mixins.models import \
+    BaseUUID, \
+    BaseDateAddedModified, \
+    BaseImageStatusSortOrder
 
 
-class Product(models.Model):
-    pass
-#     name = models.CharField(max_length=200)
-#     price = models.FloatField()
-#     image = models.ImageField(null=True, blank=True)
-#
-#     def __str__(self):
-#         return self.name
+class Product(BaseUUID,
+              BaseDateAddedModified,
+              BaseImageStatusSortOrder):
+
+    model = models.CharField(max_length=64)
+    sku = models.CharField(max_length=64)
