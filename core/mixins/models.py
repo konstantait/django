@@ -31,3 +31,15 @@ class BaseImageStatusSortOrder(models.Model):
 
     class Meta:
         abstract = True
+
+
+class BaseDescription(models.Model):
+    name = models.CharField(max_length=255)
+    description = models.TextField(blank=True, null=True)
+    tag = models.TextField(blank=True)
+    meta_title = models.CharField(max_length=255)
+    meta_description = models.CharField(max_length=255)
+    meta_keyword = models.CharField(max_length=255)
+
+    class Meta:
+        abstract = True
