@@ -10,7 +10,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = os.environ.get('SECRET_KEY')
 if not SECRET_KEY:
-    SECRET_KEY = get_random_secret_key() # noqa
+    SECRET_KEY = get_random_secret_key()
 
 DEBUG = 'RENDER' not in os.environ
 
@@ -28,7 +28,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
-    'store'
+    'catalog'
 ]
 
 MIDDLEWARE = [
