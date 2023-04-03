@@ -1,7 +1,12 @@
 import uuid
 
-from django.db import models
 from os import path
+from django.db import models
+from django.core.validators import MinValueValidator
+
+
+from core.model_choices import StatusTypes
+from core.constants import MAX_DIGITS, DECIMAL_PLACES
 
 
 def upload_to(instance, filename):
@@ -16,23 +21,6 @@ class BaseUUID(models.Model):
         abstract = True
 
 
-class BaseDateAddedModified(models.Model):
-    date_added = models.DateTimeField(auto_now_add=True)
-    date_modified = models.DateTimeField(auto_now=True)
-
-    class Meta:
-        abstract = True
-
-
-class BaseImageStatusSortOrder(models.Model):
-    image = models.ImageField(upload_to=upload_to)
-    status = models.BooleanField(default=True)
-    sort_order = models.IntegerField(default=0)
-
-    class Meta:
-        abstract = True
-
-
 class BaseDescription(models.Model):
     name = models.CharField(max_length=255)
     description = models.TextField(blank=True, null=True)
@@ -40,6 +28,54 @@ class BaseDescription(models.Model):
     # meta_title = models.CharField(max_length=255)
     # meta_description = models.CharField(max_length=255)
     # meta_keyword = models.CharField(max_length=255)
+
+    class Meta:
+        abstract = True
+
+
+class BaseImage(models.Model):
+    image = models.ImageField(upload_to=upload_to)
+
+    class Meta:
+        abstract = True
+
+
+class BaseStatusSortOrder(models.Model):
+    status = models.PositiveSmallIntegerField(
+        choices=StatusTypes.choices,
+        default=StatusTypes.ENABLED
+    )
+    sort_order = models.IntegerField(default=0)
+
+    class Meta:
+        abstract = True
+
+
+class BaseDateAdded(models.Model):
+    date_added = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        abstract = True
+
+
+class BaseDateAddedModified(
+    BaseDateAdded,
+    models.Model
+):
+    date_modified = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        abstract = True
+
+
+class BaseQuantityPrice(models.Model):
+    quantity = models.IntegerField(default=1)
+    price = models.DecimalField(
+        validators=[MinValueValidator(0)],
+        max_digits=MAX_DIGITS,
+        decimal_places=DECIMAL_PLACES,
+        default=0
+    )
 
     class Meta:
         abstract = True

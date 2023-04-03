@@ -7,9 +7,14 @@ from .models import (
     Category,
     Product,
 )
+from core.mixins.admin import BaseAdmin
 
-# admin.site.register(Language)
-# admin.site.register(CategoryDescription)
-# admin.site.register(ProductDescription)
-admin.site.register(Category)
-admin.site.register(Product)
+
+@admin.register(Product)
+class ProductAdmin(BaseAdmin):
+    list_display = ('name', 'model', 'sku', 'price')
+
+
+@admin.register(Category)
+class CategoryAdmin(BaseAdmin):
+    list_display = ('name', )

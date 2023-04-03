@@ -1,45 +1,45 @@
 from django.db import models
-from django.core.validators import MinValueValidator
-
-from core.model_choices import DiscountTypes
 
 from core.mixins.models import (
     BaseUUID,
-    BaseDateAddedModified,
-    BaseImageStatusSortOrder,
-    BaseDescription
+    BaseDescription,
+    BaseImage,
+    BaseQuantityPrice,
+    BaseStatusSortOrder,
+    BaseDateAddedModified
 )
-
-from core.constants import MAX_DIGITS, DECIMAL_PLACES
 
 
 class Category(
     BaseUUID,
     BaseDescription,  # make a separate table language_id, category_id
-    BaseDateAddedModified,
-    BaseImageStatusSortOrder
+    BaseImage,
+    BaseStatusSortOrder,
+    BaseDateAddedModified
 ):
-    pass
     # parent_id
+    def __str__(self):
+        return f"{self.name}"
 
 
 class Product(
     BaseUUID,
     BaseDescription,  # make a separate table language_id, product_id
-    BaseDateAddedModified,
-    BaseImageStatusSortOrder
+    BaseImage,
+    BaseQuantityPrice,
+    BaseStatusSortOrder,
+    BaseDateAddedModified
 ):
     model = models.CharField(max_length=64)
     sku = models.CharField(max_length=64)
+    # stock_status_id
     # manufacture_id
     # categories = models.ManyToManyField(Category, blank=True)
     # products = models.ManyToManyField('store.Product', blank=True)
-    price = models.DecimalField(
-        validators=[MinValueValidator(0)],
-        max_digits=MAX_DIGITS,
-        decimal_places=DECIMAL_PLACES,
-        default=0
-    )
+
+    def __str__(self):
+        return f"{self.name} {self.model} ({self.sku})"
+
 
 # class Language(BaseUUID, BaseImageStatusSortOrder):
 #     name = models.CharField(max_length=32)
@@ -76,15 +76,3 @@ class Product(
 #         blank=True,
 #         on_delete=models.CASCADE
 #     )
-
-
-class Discount(
-    BaseUUID
-):
-    amount = models.PositiveIntegerField()
-    code = models.CharField(max_length=64)
-    status = models.BooleanField(default=True)
-    discount_type = models.PositiveSmallIntegerField(
-        choices=DiscountTypes.choices,
-        default=DiscountTypes.CASH
-    )
