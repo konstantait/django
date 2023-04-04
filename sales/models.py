@@ -6,13 +6,19 @@ from django.utils import timezone
 
 from core.mixins.models import (
     BaseUUID,
+    BaseName,
     BaseQuantityPrice,
+    BaseStatus,
+    BaseDateStartEnd,
     BaseDateAdded,
     BaseDateAddedModified
 )
 
 from core.constants import MAX_DIGITS, DECIMAL_PLACES
-from core.model_choices import DiscountTypes
+from core.model_choices import (
+    DiscountTypes,
+    StatusTypes
+)
 from catalog.models import Product
 
 User = get_user_model()
@@ -20,15 +26,14 @@ User = get_user_model()
 
 class Coupon(
     BaseUUID,
+    BaseName,
+    BaseStatus,
+    BaseDateStartEnd,
     BaseDateAdded
 ):
-    name = models.CharField(max_length=255)
     code = models.CharField(
         max_length=32,
         unique=True
-    )
-    status = models.BooleanField(
-        default=True
     )
     discount_type = models.PositiveSmallIntegerField(
         choices=DiscountTypes.choices,
@@ -39,29 +44,29 @@ class Coupon(
         decimal_places=DECIMAL_PLACES,
         default=0
     )
-    date_start = models.DateTimeField(auto_now_add=True)
-    date_end = models.DateTimeField(auto_now=True)
 
     @property
     def is_valid(self):
-        is_valid = self.status
+        is_valid = True
+        if self.status == StatusTypes.DISABLED:
+            is_valid = False
         if self.date_start:
             is_valid &= timezone.now() >= self.date_start
         if self.date_end:
             is_valid &= timezone.now() <= self.date_end
         return is_valid
 
-
-class CouponHistory:
-    pass
+    def __str__(self):
+        return f"{self.name}"
 
 
 class Order(
     BaseUUID,
+    BaseStatus,
     BaseDateAddedModified
 ):
     invoice = models.PositiveSmallIntegerField(default=1)
-    invoice_prefix = models.CharField(max_length=16)
+    invoice_prefix = models.CharField(max_length=16, default='')
     # store_id
     # customer_id
     # customer_group_id
@@ -96,8 +101,11 @@ class Order(
                 total_cost - self.coupon.discount
                 if self.coupon.discount_type == DiscountTypes.FIXED else
                 total_cost - (total_cost / 100 * self.coupon.discount)
-            ).quantize(decimal.Decimal('.01'))
+                ).quantize(decimal.Decimal('.01'))
         return total_cost
+
+    def __str__(self):
+        return f"{self.invoice_prefix}-{self.invoice}"
 
 
 class OrderItem(
@@ -121,7 +129,7 @@ class OrderItem(
     )
 
     def get_cost(self):
-        return self.cost * self.price
+        return self.quantity * self.price
 
     class Meta:
         unique_together = ('order', 'product')
