@@ -2,19 +2,23 @@ from django.db import models
 
 from core.mixins.models import (
     BaseUUID,
+    BaseName,
     BaseDescription,
     BaseImage,
     BaseQuantityPrice,
-    BaseStatusSortOrder,
+    BaseStatus,
+    BaseSortOrder,
     BaseDateAddedModified
 )
 
 
 class Category(
     BaseUUID,
+    BaseName,
     BaseDescription,  # make a separate table language_id, category_id
     BaseImage,
-    BaseStatusSortOrder,
+    BaseStatus,
+    BaseSortOrder,
     BaseDateAddedModified
 ):
     # parent_id
@@ -24,10 +28,12 @@ class Category(
 
 class Product(
     BaseUUID,
+    BaseName,
     BaseDescription,  # make a separate table language_id, product_id
     BaseImage,
     BaseQuantityPrice,
-    BaseStatusSortOrder,
+    BaseStatus,
+    BaseSortOrder,
     BaseDateAddedModified
 ):
     model = models.CharField(max_length=64)

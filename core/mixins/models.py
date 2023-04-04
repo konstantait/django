@@ -21,8 +21,14 @@ class BaseUUID(models.Model):
         abstract = True
 
 
-class BaseDescription(models.Model):
+class BaseName(models.Model):
     name = models.CharField(max_length=255)
+
+    class Meta:
+        abstract = True
+
+
+class BaseDescription(models.Model):
     description = models.TextField(blank=True, null=True)
     # tag = models.TextField(blank=True)
     # meta_title = models.CharField(max_length=255)
@@ -40,11 +46,17 @@ class BaseImage(models.Model):
         abstract = True
 
 
-class BaseStatusSortOrder(models.Model):
+class BaseStatus(models.Model):
     status = models.PositiveSmallIntegerField(
         choices=StatusTypes.choices,
         default=StatusTypes.ENABLED
     )
+
+    class Meta:
+        abstract = True
+
+
+class BaseSortOrder(models.Model):
     sort_order = models.IntegerField(default=0)
 
     class Meta:
@@ -63,6 +75,14 @@ class BaseDateAddedModified(
     models.Model
 ):
     date_modified = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        abstract = True
+
+
+class BaseDateStartEnd(models.Model):
+    date_start = models.DateTimeField(auto_now_add=True)
+    date_end = models.DateTimeField(auto_now=True)
 
     class Meta:
         abstract = True
