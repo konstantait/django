@@ -24,6 +24,3 @@ class ProductAdmin(BaseAdmin):
 @admin.register(Review)
 class ReviewAdmin(admin.ModelAdmin):
     list_display = ('author', 'text', 'product', 'rating')
-
-
-
