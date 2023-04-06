@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth import get_user_model
 
 from core.mixins.models import (
     BaseUUID,
@@ -10,6 +11,12 @@ from core.mixins.models import (
     BaseSortOrder,
     BaseDateAddedModified
 )
+
+from core.model_choices import (
+    RatingTypes
+)
+
+User = get_user_model()
 
 
 class Category(
@@ -46,6 +53,26 @@ class Product(
     def __str__(self):
         return f"{self.name} {self.model} ({self.sku})"
 
+
+class Review(
+    BaseUUID,
+    BaseStatus,
+    BaseDateAddedModified
+):
+    text = models.TextField(blank=False, null=False)
+    author = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE
+    )
+    rating = models.PositiveSmallIntegerField(
+        choices=RatingTypes.choices,
+        default=RatingTypes.EXCELLENT
+    )
+    product = models.ForeignKey(
+        Product,
+        on_delete=models.PROTECT,
+        related_name='reviews',
+    )
 
 # class Language(BaseUUID, BaseImageStatusSortOrder):
 #     name = models.CharField(max_length=32)
