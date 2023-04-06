@@ -18,5 +18,5 @@ class ReviewModelForm(forms.ModelForm):
     def clean_text(self):
         data = strip_tags(self.cleaned_data['text'])
         if not data:
-            raise forms.ValidationError("Text field empty after clearing html-tags")
+            raise ValidationError("Text field empty after clearing html-tags")
         return data
