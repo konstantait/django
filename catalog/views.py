@@ -1,32 +1,27 @@
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import render, redirect
-from django.contrib import messages
+from django.shortcuts import render
 
-from catalog.models import Review
-from catalog.forms import ReviewModelForm
+from .models import Review
+from .forms import ReviewModelForm
 
 
 def home(request):
+    template_name = 'catalog/index.html'
     context = {}
-    return render(request, 'catalog/index.html', context)
+    return render(request, template_name, context=context)
 
 
-@login_required
+@login_required(login_url='login')
 def reviews(request):
-    author = request.user
-    form = ReviewModelForm(author=author)
+    template_name = 'catalog/reviews.html'
+    user = request.user
+    form = ReviewModelForm(user=user)
     if request.method == 'POST':
-        form = ReviewModelForm(author=author, data=request.POST)
+        form = ReviewModelForm(user=user, data=request.POST)
         if form.is_valid():
             form.save()
-            messages.success(request, 'Thank you for review!')
-            return redirect('home')
-        else:
-            messages.error(request, 'Check input')
-    else:
-        messages.info(request, f'Welcome {author}, leave your review')
     context = {
         'form': form,
         'reviews': Review.objects.all()
     }
-    return render(request, 'catalog/reviews.html', context=context)
+    return render(request, template_name, context=context)

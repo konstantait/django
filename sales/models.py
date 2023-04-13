@@ -15,7 +15,7 @@ from core.mixins.models import (
 )
 
 from core.constants import MAX_DIGITS, DECIMAL_PLACES
-from core.model_choices import (
+from core.enums import (
     DiscountTypes,
     StatusTypes
 )
@@ -67,21 +67,12 @@ class Order(
 ):
     invoice = models.PositiveSmallIntegerField(default=1)
     invoice_prefix = models.CharField(max_length=16, default='')
-    # store_id
-    # customer_id
-    # customer_group_id
     user = models.ForeignKey(
         User,
         on_delete=models.SET_NULL,
         blank=True,
         null=True
     )
-    # payment fields
-    # shipping fields
-    # order_status_id
-    # is_active = models.BooleanField(default=True)
-    # is_paid = models.BooleanField(default=False)
-
     coupon = models.ForeignKey(
         Coupon,
         on_delete=models.SET_NULL,

@@ -3,16 +3,19 @@
 {% block content %}
 <form method="post">
     {% csrf_token %}
-    <table>{{ form.as_table }}</table>
-    <input type="submit" value="Save">
+    <fieldset>
+    <legend>Post a review</legend>
+    {{ form.as_div }}
+    <br>
+    <input type="submit" value="Post">
+    </fieldset>
 </form>
 <br>
 <br>
-<h5 style="text-indent: 25px;">Reviews:</h5>
+<h5 >Reviews:</h5>
 <ul>
     {% for review in reviews %}
     <li>[{{ review.product }}] {{ review.text }} ({{ review.author }}, {{ review.get_rating_display }})</li>
     {% endfor %}
 </ul>
-
 {% endblock content %}

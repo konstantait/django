@@ -5,7 +5,7 @@ from django.db import models
 from django.core.validators import MinValueValidator
 
 
-from core.model_choices import StatusTypes
+from core.enums import StatusTypes
 from core.constants import MAX_DIGITS, DECIMAL_PLACES
 
 
