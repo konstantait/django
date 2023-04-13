@@ -1,9 +1,6 @@
 from django.contrib import admin
 
 from .models import (
-    # Language,
-    # CategoryDescription,
-    # ProductDescription,
     Category,
     Product,
     Review
@@ -23,4 +20,4 @@ class ProductAdmin(BaseAdmin):
 
 @admin.register(Review)
 class ReviewAdmin(admin.ModelAdmin):
-    list_display = ('author', 'text', 'product', 'rating')
+    list_display = ('author', 'product', 'rating', 'text')

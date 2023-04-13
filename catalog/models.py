@@ -12,7 +12,7 @@ from core.mixins.models import (
     BaseDateAddedModified
 )
 
-from core.model_choices import (
+from core.enums import (
     RatingTypes
 )
 
@@ -45,10 +45,6 @@ class Product(
 ):
     model = models.CharField(max_length=64)
     sku = models.CharField(max_length=64)
-    # stock_status_id
-    # manufacture_id
-    # categories = models.ManyToManyField(Category, blank=True)
-    # products = models.ManyToManyField('store.Product', blank=True)
 
     def __str__(self):
         return f"{self.name} {self.model} ({self.sku})"
@@ -59,53 +55,21 @@ class Review(
     BaseStatus,
     BaseDateAddedModified
 ):
-    text = models.TextField(blank=False, null=False)
     author = models.ForeignKey(
         User,
-        on_delete=models.CASCADE
+        on_delete=models.CASCADE,
+        related_name='reviews',
+    )
+    product = models.ForeignKey(
+        Product,
+        on_delete=models.CASCADE,
+        related_name='reviews',
     )
     rating = models.PositiveSmallIntegerField(
         choices=RatingTypes.choices,
         default=RatingTypes.EXCELLENT
     )
-    product = models.ForeignKey(
-        Product,
-        on_delete=models.PROTECT,
-        related_name='reviews',
+    text = models.TextField(
+        blank=False,
+        null=False
     )
-
-# class Language(BaseUUID, BaseImageStatusSortOrder):
-#     name = models.CharField(max_length=32)
-#     code = models.CharField(max_length=5)
-#     locale = models.CharField(max_length=255)
-
-# class CategoryDescription(
-#     BaseUUID,
-#     BaseDescription
-# ):
-#     category = models.ForeignKey(
-#         Category,
-#         blank=True,
-#         on_delete=models.CASCADE
-#     )
-#     language = models.ForeignKey(
-#         Language,
-#         blank=True,
-#         on_delete=models.CASCADE
-#     )
-
-
-# class ProductDescription(
-#     BaseUUID,
-#     BaseDescription
-# ):
-#     product = models.ForeignKey(
-#         Product,
-#         blank=True,
-#         on_delete=models.CASCADE
-#     )
-#     language = models.ForeignKey(
-#         Language,
-#         blank=True,
-#         on_delete=models.CASCADE
-#     )
