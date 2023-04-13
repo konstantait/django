@@ -1,13 +1,7 @@
-# import logging
-# import pprint
-# logger = logging.getLogger('django')
-# logger.info(pprint.pformat(request.__dict__, depth=1))
-# logger.info(request.POST)
-
-from django.contrib.auth import login as auth_login
-from django.contrib.auth import logout as auth_logout
 from django.shortcuts import render, redirect
 from django.utils.http import url_has_allowed_host_and_scheme
+from django.contrib.auth import login as auth_login
+from django.contrib.auth import logout as auth_logout
 
 from .forms import LoginForm, SignupForm
 
@@ -34,7 +28,6 @@ def login(request):
 def signup(request):
     template_name = 'accounts/signup.html'
     user = request.user
-
     form = SignupForm(user=user)
     if request.method == "POST":
         form = SignupForm(user=user, data=request.POST)

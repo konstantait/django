@@ -56,18 +56,15 @@ class SignupForm(forms.ModelForm):
 
     class Meta:
         model = User
-        fields = ('username', 'email', 'password', 'password2')
+        fields = ('email', 'password', 'password2')
         labels = {
-            'username': '',
             'email': 'Email address',
             'password': 'Password',
         }
 
-    def __init__(self, user, *args, **kwargs):
+    def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields['username'].widget = forms.HiddenInput()
-        self.fields['username'].initial = user
-        self.fields['password'].widget = forms.EmailInput()
+        self.fields['email'].widget = forms.EmailInput()
         self.fields['email'].widget.attrs['class'] = 'form-control'
         self.fields['email'].widget.attrs['placeholder'] = 'Email address'
         self.fields['password'].widget = forms.PasswordInput()
