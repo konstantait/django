@@ -1,15 +1,15 @@
 from django import forms
 from django.utils.html import strip_tags
 
-from catalog.models import Review
+from .models import Review
 
 
-class ReviewModelForm(forms.ModelForm):
+class ReviewForm(forms.ModelForm):
     class Meta:
         model = Review
         fields = ('author', 'product', 'rating', 'text')
 
-    def __init__(self, user, *args, **kwargs):
+    def __init__(self, user=None, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['author'].widget = forms.HiddenInput()
         self.fields['author'].initial = user
