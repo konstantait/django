@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth import get_user_model
 
+from core.constants import MAX_DIGITS, DECIMAL_PLACES
 from core.mixins.models import (
     BaseUUID,
     BaseName,
@@ -45,6 +46,11 @@ class Product(
 ):
     model = models.CharField(max_length=64)
     sku = models.CharField(max_length=64)
+    price = models.DecimalField(
+        max_digits=MAX_DIGITS,
+        decimal_places=DECIMAL_PLACES,
+        default=0
+    )
 
     def __str__(self):
         return f"{self.name} {self.model} ({self.sku})"
