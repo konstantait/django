@@ -4,7 +4,7 @@ from django.views.generic import FormView, ListView
 
 from .models import Product
 from .forms import ReviewForm
-from django.urls import reverse, reverse_lazy
+from django.urls import reverse_lazy
 
 
 class ProductListView(ListView):
