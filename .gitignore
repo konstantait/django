@@ -131,6 +131,3 @@ dmypy.json
 
 # JetBrains IDEs
 .idea/
-
-# Django migrations
-migration/
