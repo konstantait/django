@@ -1,7 +1,6 @@
 from django.db import models
 from django.contrib.auth import get_user_model
 
-from core.constants import MAX_DIGITS, DECIMAL_PLACES
 from core.mixins.models import (
     BaseUUID,
     BaseName,
@@ -20,40 +19,90 @@ from core.enums import (
 User = get_user_model()
 
 
+class AttributeGroup(
+    BaseUUID,
+    BaseName,
+    BaseSortOrder
+):
+    def __str__(self):
+        return self.name
+
+
+class Attribute(
+    BaseUUID,
+    BaseName,
+    BaseSortOrder
+):
+    attribute_group = models.ForeignKey(
+        AttributeGroup,
+        on_delete=models.CASCADE,
+        related_name='attributes',
+        verbose_name='Group'
+    )
+
+    def __str__(self):
+        return self.name
+
+
 class Category(
     BaseUUID,
     BaseName,
-    BaseDescription,  # make a separate table language_id, category_id
-    BaseImage,
+    BaseDescription,
     BaseStatus,
     BaseSortOrder,
     BaseDateAddedModified
 ):
-    # parent_id
     def __str__(self):
-        return f"{self.name}"
+        return self.name
 
 
 class Product(
     BaseUUID,
     BaseName,
-    BaseDescription,  # make a separate table language_id, product_id
+    BaseDescription,
     BaseImage,
     BaseQuantityPrice,
     BaseStatus,
     BaseSortOrder,
     BaseDateAddedModified
 ):
-    model = models.CharField(max_length=64)
-    sku = models.CharField(max_length=64)
-    price = models.DecimalField(
-        max_digits=MAX_DIGITS,
-        decimal_places=DECIMAL_PLACES,
-        default=0
+    model = models.CharField(max_length=64, default='')
+    sku = models.CharField(max_length=64, default='')
+
+    categories = models.ManyToManyField(
+        Category,
+        related_name='products',
+    )
+
+    attributes = models.ManyToManyField(
+        Attribute,
+        related_name='products',
     )
 
     def __str__(self):
-        return f"{self.name} {self.model} ({self.sku})"
+        return self.name
+
+    def get_categories(self):
+        return [
+            category['name'] for category in (
+                self.categories
+                .all()
+                .order_by('sort_order')
+                .values('name')
+            )
+        ]
+
+    def get_attributes(self):
+        return [
+            attribute['attribute_group__name'] +
+            ':' +
+            attribute['name'] for attribute in (
+                self.attributes
+                .select_related('attribute_group')
+                .order_by('attribute_group__sort_order')
+                .values('attribute_group__name', 'name')
+            )
+        ]
 
 
 class Review(

@@ -2,3 +2,4 @@ django
 python-dotenv
 flake8
 pillow
+django-widget-tweaks
