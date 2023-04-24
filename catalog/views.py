@@ -5,8 +5,7 @@ from django.http import HttpResponse
 from django.views import View
 from django.views.generic import FormView, ListView
 
-from django.contrib.auth.decorators import login_required
-# user_passes_test
+from django.contrib.auth.decorators import login_required, user_passes_test  # noqa
 from django.utils.decorators import method_decorator
 
 from core.constants import (
@@ -39,6 +38,11 @@ class ReviewView(FormView):
 
 
 class ExportCSV(View):
+
+    @method_decorator(login_required)
+    def dispatch(self, request, *args, **kwargs):
+        return super().dispatch(request, *args, **kwargs)
+
     def get(self, request, *args, **kwargs):
         headers = {
             'Content-Type': 'text/csv',
@@ -83,8 +87,8 @@ class ImportCSV(FormView):
     template_name = 'catalog/import.html'
     success_url = reverse_lazy('home:index')
 
-    # @method_decorator(login_required)
-    # @method_decorator(user_passes_test(lambda u: u.is_staff))
+    @method_decorator(login_required)
+    @method_decorator(user_passes_test(lambda u: u.is_staff))
     def dispatch(self, request, *args, **kwargs):
         return super().dispatch(request, *args, **kwargs)
 
