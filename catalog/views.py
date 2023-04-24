@@ -12,6 +12,7 @@ from django.utils.decorators import method_decorator
 from core.constants import (
     CSV_FIELDS_DELIMITER,
     CSV_IN_FIELD_DELIMITER,
+    IMAGE_PLACEHOLDER,
 )
 from catalog.models import Product
 from catalog.forms import ReviewForm, ImportCSVForm
@@ -68,7 +69,7 @@ class ExportCSV(View):
                     'model': product.model,
                     'sku': product.sku,
                     'description': product.description,
-                    'image': product.image.name if product.image else 'no image', # noqa
+                    'image': product.image.name if product.image else IMAGE_PLACEHOLDER, # noqa
                     'price': product.price,
                     'attributes': CSV_IN_FIELD_DELIMITER.join(product.get_attributes()), # noqa
                 }
@@ -88,6 +89,5 @@ class ImportCSV(FormView):
         return super().dispatch(request, *args, **kwargs)
 
     def form_valid(self, form):
-        print(form)
         form.save()
         return super().form_valid(form)

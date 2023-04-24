@@ -23,6 +23,6 @@ class BaseAdmin(admin.ModelAdmin):
     def image_field(self, obj):
         if not obj.image:
             return 'No image'
-        return f'<img src="{obj.image.url}" width="64" height="64"/>'
+        return f'<img src="{obj.image.url}" height="64"/>'
 
     image_field.short_description = 'Image'

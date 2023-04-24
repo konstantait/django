@@ -36,7 +36,7 @@ class BaseDescription(models.Model):
 
 
 class BaseImage(models.Model):
-    image = models.ImageField(upload_to=upload_to, default='placeholder_small.jpg') # noqa
+    image = models.ImageField(upload_to=upload_to, default='placeholder.jpg') # noqa
 
     class Meta:
         abstract = True

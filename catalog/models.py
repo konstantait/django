@@ -12,6 +12,10 @@ from core.mixins.models import (
     BaseDateAddedModified
 )
 
+from core.constants import (
+    CSV_IN_FIELD_ATTR_DELIMITER
+)
+
 from core.enums import (
     RatingTypes
 )
@@ -66,17 +70,26 @@ class Product(
     BaseSortOrder,
     BaseDateAddedModified
 ):
-    model = models.CharField(max_length=64, default='')
-    sku = models.CharField(max_length=64, default='')
+    model = models.CharField(
+        max_length=64,
+        default='',
+        blank=True
+    )
+    sku = models.CharField(
+        max_length=64,
+        unique=True
+    )
 
     categories = models.ManyToManyField(
         Category,
         related_name='products',
+        blank=True
     )
 
     attributes = models.ManyToManyField(
         Attribute,
         related_name='products',
+        blank=True
     )
 
     def __str__(self):
@@ -95,7 +108,7 @@ class Product(
     def get_attributes(self):
         return [
             attribute['attribute_group__name'] +
-            ':' +
+            CSV_IN_FIELD_ATTR_DELIMITER +
             attribute['name'] for attribute in (
                 self.attributes
                 .select_related('attribute_group')

@@ -4,13 +4,12 @@ from io import StringIO
 
 from django import forms
 from django.utils.html import strip_tags
-# from django.core.exceptions import ValidationError
 from django.core.validators import FileExtensionValidator
 
 from core.constants import (
     CSV_FIELDS_DELIMITER,
     CSV_IN_FIELD_DELIMITER,
-    CSV_IN_FIELD_ATTR_DELIMITER
+    CSV_IN_FIELD_ATTR_DELIMITER,
 )
 from catalog.models import (
     AttributeGroup,
@@ -19,6 +18,69 @@ from catalog.models import (
     Product,
     Review,
 )
+
+
+class ImportCSVForm(forms.Form):
+    file = forms.FileField(
+        validators=[FileExtensionValidator(['csv'])]
+    )
+
+    def save(self):
+        csv_file = self.cleaned_data['file']
+        reader = csv.DictReader(StringIO(
+            csv_file.read().decode('utf-8')),
+            delimiter=CSV_FIELDS_DELIMITER
+        )
+        for row in reader:
+            categories = []
+            if row['categories']:
+                categories_names = row['categories'].split(CSV_IN_FIELD_DELIMITER) # noqa
+                for name in categories_names:
+                    category, _ = Category.objects.get_or_create(name=name)
+                    categories.append(category)
+            attributes = []
+            if row['attributes']:
+                attributes_names = row['attributes'].split(CSV_IN_FIELD_DELIMITER) # noqa
+                for name in attributes_names:
+                    attribute_group_name, attribute_name = \
+                        name.split(CSV_IN_FIELD_ATTR_DELIMITER)
+                    attribute_group, attribute_group_created = \
+                        AttributeGroup.objects.get_or_create(name=attribute_group_name)  # noqa
+                    if attribute_group_created:
+                        attribute = Attribute(
+                            attribute_group=attribute_group,
+                            name=attribute_name
+                        )
+                        attribute.save(force_insert=True)
+                    else:
+                        attribute = Attribute.objects.get(
+                            attribute_group=attribute_group,
+                            name=attribute_name
+                        )
+                    attributes.append(attribute)
+
+            if row['sku']:
+                try:
+                    _ = Product(
+                        sku=row['sku'],
+                        name=row['name'],
+                        model=row['model'],
+                        description=row['description'],
+                        price=decimal.Decimal(row['price']),
+                    )
+                    product, _ = Product.objects.update_or_create(sku=row['sku']) # noqa
+                    product.name = row['name']
+                    product.model = row['model']
+                    product.description = row['description']
+                    product.price = decimal.Decimal(row['price'])
+                    product.categories.clear()
+                    product.categories.set(categories)
+                    product.attributes.clear()
+                    product.attributes.set(attributes)
+                    product.save()
+                except (KeyError, decimal.InvalidOperation) as err:
+                    # logging, continuing work
+                    print(f'Error {err}')
 
 
 class ReviewForm(forms.ModelForm):
@@ -36,60 +98,3 @@ class ReviewForm(forms.ModelForm):
         if not data:
             raise forms.ValidationError('Text field empty after clearing html-tags') # noqa
         return data
-
-
-class ImportCSVForm(forms.Form):
-    file = forms.FileField(
-        validators=[FileExtensionValidator(['csv'])]
-    )
-
-    def save(self):
-        csv_file = self.cleaned_data['file']
-        reader = csv.DictReader(StringIO(
-            csv_file.read().decode('utf-8')),
-            delimiter=CSV_FIELDS_DELIMITER
-        )
-        for row in reader:
-            product, product_created = Product.objects.get_or_create(
-                name=row['name'],
-                model=row['model'],
-                sku=row['sku'],
-                description=row['description'],
-                price=decimal.Decimal(row['price']),
-            )
-
-            categories = []
-            product.categories.clear()
-            print('product.categories.clear()')
-            categories_names = row['categories'].split(CSV_IN_FIELD_DELIMITER)
-            for name in categories_names:
-                category, _ = Category.objects.get_or_create(name=name)
-                categories.append(category)
-            product.categories.set(categories)
-            print('product.categories.set()')
-
-            attributes = []
-            product.attributes.clear()
-            print('product.attributes.clear()')
-            attributes_names = row['attributes'].split(CSV_IN_FIELD_DELIMITER)
-            for name in attributes_names:
-                attribute_group_name, attribute_name = \
-                    name.split(CSV_IN_FIELD_ATTR_DELIMITER)
-                attribute_group, attribute_group_created = \
-                    AttributeGroup.objects.get_or_create(name=attribute_group_name) # noqa
-                if attribute_group_created:
-                    attribute = Attribute(
-                        attribute_group=attribute_group,
-                        name=attribute_name
-                    )
-                    attribute.save(force_insert=True)
-                else:
-                    attribute = Attribute.objects.get(
-                        attribute_group=attribute_group,
-                        name=attribute_name
-                    )
-                attributes.append(attribute)
-            product.attributes.set(attributes)
-            print('product.attributes.set()')
-
-            product.save()
