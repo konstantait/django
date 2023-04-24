@@ -11,7 +11,7 @@ from core.constants import MAX_DIGITS, DECIMAL_PLACES
 
 def upload_to(instance, filename):
     _name, extension = path.splitext(filename)
-    return f"store/images/{str(instance.pk)}.{extension}"
+    return f"/images/{str(instance.pk)}.{extension}"
 
 
 class BaseUUID(models.Model):
@@ -30,17 +30,13 @@ class BaseName(models.Model):
 
 class BaseDescription(models.Model):
     description = models.TextField(blank=True, null=True)
-    # tag = models.TextField(blank=True)
-    # meta_title = models.CharField(max_length=255)
-    # meta_description = models.CharField(max_length=255)
-    # meta_keyword = models.CharField(max_length=255)
 
     class Meta:
         abstract = True
 
 
 class BaseImage(models.Model):
-    image = models.ImageField(upload_to=upload_to)
+    image = models.ImageField(upload_to=upload_to, default='placeholder_small.jpg') # noqa
 
     class Meta:
         abstract = True
@@ -57,14 +53,20 @@ class BaseStatus(models.Model):
 
 
 class BaseSortOrder(models.Model):
-    sort_order = models.IntegerField(default=0)
+    sort_order = models.IntegerField(
+        default=0,
+        verbose_name='Sort'
+    )
 
     class Meta:
         abstract = True
 
 
 class BaseDateAdded(models.Model):
-    date_added = models.DateTimeField(auto_now_add=True)
+    date_added = models.DateTimeField(
+        auto_now_add=True,
+        verbose_name='Added'
+    )
 
     class Meta:
         abstract = True
@@ -74,7 +76,10 @@ class BaseDateAddedModified(
     BaseDateAdded,
     models.Model
 ):
-    date_modified = models.DateTimeField(auto_now=True)
+    date_modified = models.DateTimeField(
+        auto_now=True,
+        verbose_name='Modified'
+    )
 
     class Meta:
         abstract = True
