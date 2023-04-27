@@ -19,6 +19,8 @@ ALLOWED_HOSTS = []
 LOGIN_REDIRECT_URL = 'home:index'
 LOGOUT_REDIRECT_URL = 'home:index'
 
+CART_SESSION_ID = 'cart'
+
 RENDER_EXTERNAL_HOSTNAME = os.environ.get('RENDER_EXTERNAL_HOSTNAME')
 if RENDER_EXTERNAL_HOSTNAME:
     ALLOWED_HOSTS.append(RENDER_EXTERNAL_HOSTNAME)
@@ -33,6 +35,8 @@ INSTALLED_APPS = [
     'widget_tweaks',
     'accounts',
     'catalog',
+    'cart',
+    'orders',
 ]
 
 MIDDLEWARE = [
@@ -43,6 +47,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'core.middlewares.HTMLOptimize',
 ]
 
 ROOT_URLCONF = 'core.urls'
@@ -58,6 +63,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'cart.context_processors.cart',
             ],
         },
     },

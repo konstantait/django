@@ -2,13 +2,20 @@ from django.urls import path
 from django.conf.urls.static import static
 from django.conf import settings
 
-from catalog.views import ProductListView, ReviewView, ExportCSV, ImportCSV
+from catalog.views import (
+    ProductListView,
+    ProductDetailView,
+    ExportCSV,
+    ImportCSV,
+)
 
 app_name = 'catalog'
 
 urlpatterns = [
-    path('products/', ProductListView.as_view(), name="products"),
-    path('reviews/', ReviewView.as_view(), name="reviews"),
+    path('<slug:category_slug>/', ProductListView.as_view(),
+         name='product_list'),
+    path('<slug:category_slug>/<slug:slug>/', ProductDetailView.as_view(),
+         name='product_detail'),
     path('export/', ExportCSV.as_view(), name='export'),
     path('import/', ImportCSV.as_view(), name='import'),
 ]

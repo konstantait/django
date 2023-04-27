@@ -18,19 +18,22 @@ class AttributeAdmin(admin.ModelAdmin):
 
 @admin.register(AttributeGroup)
 class AttributeGroupAdmin(admin.ModelAdmin):
-    list_display = ('name', 'sort_order')
-    ordering = ('sort_order', )
+    list_display = ('name', 'sort_order', )
+    ordering = ('name', 'sort_order', )
 
 
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
-    list_display = ('name', 'sort_order', 'date_added', 'date_modified')
-    ordering = ('sort_order', 'name')
+    list_display = ('name', 'slug', 'sort_order', )
+    ordering = ('sort_order', 'slug')
+    prepopulated_fields = {'slug': ('name',)}
 
 
 @admin.register(Product)
 class ProductAdmin(BaseAdmin):
-    list_display = ('name', 'model', 'sku', 'price',)
+    list_display = ('name', 'slug', 'model', 'sku', 'price', )
+    ordering = ('slug', )
+    prepopulated_fields = {'slug': ('name', )}
 
 
 @admin.register(Review)
