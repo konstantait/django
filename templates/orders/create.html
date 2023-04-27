@@ -1,26 +1,29 @@
 {% extends "layouts/base.html" %}
 
-{% block title %}
-  Checkout
-{% endblock %}
-
 {% block content %}
-  <h1>Checkout</h1>
-  <div class="order-info">
-    <h3>Your order</h3>
+<div class="p-4">
+  <form class="p-2 p-md-5 border rounded-3 bg-light" method="post">
+    <h4>Check out your order</h4>
     <ul>
       {% for item in cart %}
-        <li>
-          {{ item.quantity }}x {{ item.product.name }}
-          <span>${{ item.total_price }}</span>
-        </li>
+      <li>
+        {{ item.quantity }}x {{ item.product.name }}
+        <span>${{ item.total_price }}</span>
+      </li>
       {% endfor %}
     </ul>
     <p>Total: ${{ cart.get_total_price }}</p>
-  </div>
-  <form method="post" class="order-form">
-    {{ form.as_p }}
-    <p><input type="submit" value="Place order"></p>
+    {% load widget_tweaks %}
     {% csrf_token %}
+    {% for field in form.visible_fields %}
+    <div class="form-floating mb-2">
+      {% render_field field|add_error_class:'is-invalid' class="form-control" placeholder=field.label %}
+      {{ field.label_tag }}
+    </div>
+    {% endfor %}
+    <p><button class="w-100 btn btn-lg btn-primary" type="submit">Place order</button></p>
   </form>
+</div>
 {% endblock %}
+
+

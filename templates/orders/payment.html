@@ -1,0 +1,17 @@
+{% extends "layouts/base.html" %}
+
+{% block content %}
+<div class="p-4">
+  <h4>Payment</h4>
+  <p>Your order {{ order.id }}.</p>
+  <p>Total cost: <span class="num">{{ order.total_cost }}</span></p>
+  <p>Discount: {{ order.discount }}.</p>
+  <p>Total amount to be paid: {{ order.get_total_amount }}.</p>
+
+<form method = "POST">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <input class="btn-primary" type = "submit" value = "Payment">
+</form>
+</div>
+{% endblock %}

@@ -97,11 +97,23 @@ class Order(
         default=0
     )
 
+    discount = models.DecimalField(
+        max_digits=MAX_DIGITS,
+        decimal_places=DECIMAL_PLACES,
+        default=0
+    )
+
+    def get_discount(self):
+        return self.coupon.get_cost_with_discount(self.total_cost)
+
     def get_total_cost(self):
-        total_cost = sum(item.get_cost() for item in self.items.all())
-        if self.coupon:
-            total_cost = self.coupon.get_cost_with_discount(total_cost)
-        return total_cost
+        return sum(item.get_cost() for item in self.items.all())
+
+    def get_total_amount(self):
+        return self.total_cost + self.discount
+
+    def payment(self):
+        self.is_paid = True
 
     def __str__(self):
         return f"Order {self.id}"
