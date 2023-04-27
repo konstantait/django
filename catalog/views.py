@@ -3,7 +3,7 @@ import csv
 from django.urls import reverse_lazy
 from django.http import HttpResponse
 from django.views import View
-from django.views.generic import FormView, ListView
+from django.views.generic import FormView, ListView, DetailView
 
 from django.contrib.auth.decorators import login_required, user_passes_test  # noqa
 from django.utils.decorators import method_decorator
@@ -15,12 +15,33 @@ from core.constants import (
 )
 from catalog.models import Product
 from catalog.forms import ReviewForm, ImportCSVForm
+from cart.forms import CartAddProductForm
 
 
 class ProductListView(ListView):
-    template_name = 'catalog/products.html'
-    context_object_name = 'products'
     model = Product
+    template_name = 'catalog/product_list.html'
+    context_object_name = 'products'
+    extra_context = {'category': Product.get_main_category}
+
+    def get_queryset(self):
+        return Product.objects.filter(categories__slug=self.kwargs['category_slug']) # noqa
+
+
+class ProductDetailView(DetailView):
+    model = Product
+    template_name = 'catalog/product_detail.html'
+    context_object_name = 'product'
+    extra_context = {'category': Product.get_main_category}
+
+    def get_queryset(self):
+        return Product.objects.filter(slug=self.kwargs['slug'])
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        cart_product_form = CartAddProductForm()
+        context['cart_product_form'] = cart_product_form
+        return context
 
 
 class ReviewView(FormView):

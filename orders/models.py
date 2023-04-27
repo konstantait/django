@@ -56,23 +56,35 @@ class Coupon(
             is_valid &= timezone.now() <= self.date_end
         return is_valid
 
+    def get_cost_with_discount(self, cost):
+        if self.is_valid:
+            cost = (
+                cost - self.discount
+                if self.discount_type == DiscountTypes.FIXED else
+                cost - (cost / 100 * self.discount)
+            ).quantize(decimal.Decimal('.01'))
+        return cost
+
     def __str__(self):
         return f"{self.name}"
 
 
 class Order(
     BaseUUID,
-    BaseStatus,
+    BaseName,
     BaseDateAddedModified
 ):
-    invoice = models.PositiveSmallIntegerField(default=1)
-    invoice_prefix = models.CharField(max_length=16, default='')
-    user = models.ForeignKey(
-        User,
-        on_delete=models.SET_NULL,
-        blank=True,
-        null=True
-    )
+    # invoice = models.PositiveSmallIntegerField(default=1)
+    # invoice_prefix = models.CharField(max_length=16, default='')
+    # user = models.ForeignKey(
+    #     User,
+    #     on_delete=models.SET_NULL,
+    #     blank=True,
+    #     null=True
+    # )
+    email = models.EmailField()
+    phone = models.CharField(max_length=11)
+    is_paid = models.BooleanField(default=False)
     coupon = models.ForeignKey(
         Coupon,
         on_delete=models.SET_NULL,
@@ -87,16 +99,12 @@ class Order(
 
     def get_total_cost(self):
         total_cost = sum(item.get_cost() for item in self.items.all())
-        if self.coupon and self.coupon.is_valid:
-            total_cost = (
-                total_cost - self.coupon.discount
-                if self.coupon.discount_type == DiscountTypes.FIXED else
-                total_cost - (total_cost / 100 * self.coupon.discount)
-                ).quantize(decimal.Decimal('.01'))
+        if self.coupon:
+            total_cost = self.coupon.get_cost_with_discount(total_cost)
         return total_cost
 
     def __str__(self):
-        return f"{self.invoice_prefix}-{self.invoice}"
+        return f"Order {self.id}"
 
 
 class OrderItem(
@@ -110,17 +118,15 @@ class OrderItem(
     )
     product = models.ForeignKey(
         Product,
-        on_delete=models.PROTECT,
+        on_delete=models.CASCADE,
         related_name='order_items',
-    )
-    cost = models.DecimalField(
-        max_digits=MAX_DIGITS,
-        decimal_places=DECIMAL_PLACES,
-        default=0
     )
 
     def get_cost(self):
-        return self.quantity * self.price
+        return self.price * self.quantity
+
+    def __str__(self):
+        return str(self.id)
 
     class Meta:
         unique_together = ('order', 'product')

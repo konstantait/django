@@ -22,7 +22,14 @@ class BaseUUID(models.Model):
 
 
 class BaseName(models.Model):
-    name = models.CharField(max_length=255)
+    name = models.CharField(max_length=100)
+
+    class Meta:
+        abstract = True
+
+
+class BaseSlug(models.Model):
+    slug = models.SlugField(max_length=100, unique=True)
 
     class Meta:
         abstract = True
@@ -86,8 +93,8 @@ class BaseDateAddedModified(
 
 
 class BaseDateStartEnd(models.Model):
-    date_start = models.DateTimeField(auto_now_add=True)
-    date_end = models.DateTimeField(auto_now=True)
+    date_start = models.DateTimeField()
+    date_end = models.DateTimeField()
 
     class Meta:
         abstract = True
