@@ -1,8 +1,12 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from .models import OrderItem
 from .forms import OrderCreateForm
 # from .tasks import order_created
+
+from django.views.generic.edit import UpdateView
+
 from cart.cart import Cart
+from orders.models import Order
 
 
 def order_create(request):
@@ -17,15 +21,21 @@ def order_create(request):
                     product=item['product'],
                     price=item['price'],
                     quantity=item['quantity'])
-            order = form.save()
-            cart.clear()
+            order.save()
+            # cart.clear()
             # asynchronous task send mail
             # order_created(order.id)
-            return render(request,
-                          'orders/created.html',
-                          {'order': order})
+            return redirect('orders:payment', pk=order.id)
+
     else:
         form = OrderCreateForm()
     return render(request,
                   'orders/create.html',
                   {'cart': cart, 'form': form})
+
+
+class PaymentView(UpdateView):
+    model = Order
+    fields = ["is_paid"]
+    template_name = 'orders/payment.html'
+    success_url = "/"

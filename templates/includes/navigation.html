@@ -27,37 +27,8 @@
           <li class="nav-item"><a class="nav-link" href="{% url 'home:index' %}">Contacts</a>
           </li>
         </ul>
-        {% if user.is_authenticated %}
-        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-          <a class="btn btn-light me-md-2" href="{% url 'accounts:logout' %}" role="button">Logout</a>
-          <button class="btn btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample" aria-controls="offcanvasExample">Cart</button>
-        </div>
-        {% else %}
-        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-          {% if request.path == 'accounts/login/' %}
-          <a class="btn btn-primary" href="{% url 'accounts:login' %}" role="button">Login</a>
-          <a class="btn btn-light me-md-2" href="{% url 'accounts:signup' %}" role="button">Signup</a>
-          {% else %}
-          <a class="btn btn-light me-md-2" href="{% url 'accounts:login' %}" role="button">Login</a>
-          <a class="btn btn-primary" href="{% url 'accounts:signup' %}" role="button">Signup</a>
-          {% endif %}
-        </div>
-        {% endif %}
+        {% include "includes/nav-buttons.html" %}
       </div>
     </div>
   </nav>
-  {% if user.is_authenticated %}
-  <!-- Offcanvas -->
-  <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
-    <div class="offcanvas-header">
-      <h5 class="offcanvas-title" id="offcanvasExampleLabel">Welcome, {{ user.get_username }}!</h5>
-      <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-    </div>
-    <div class="offcanvas-body">
-      <div>
-        Your shopping cart is empty
-      </div>
-    </div>
-  </div>
 </header>
-{% endif %}

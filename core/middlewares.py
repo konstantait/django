@@ -7,7 +7,8 @@ class HTMLOptimize:
 
     def __call__(self, request):
         response = self.get_response(request)
-        new_content = re.sub(r'(?m)^\s*$\n?', '', response.content.decode())
-        response.content = new_content.encode()
-        response["Content-Length"] = len(response.content)
+        if 'text/html' in response.get('Content-Type', ''):
+            new_content = re.sub(r'\n\s*?\n', lambda *_: '\n', response.content.decode()) # noqa
+            response.content = new_content.encode()
+            response["Content-Length"] = len(response.content)
         return response

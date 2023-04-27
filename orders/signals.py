@@ -6,5 +6,7 @@ from orders.models import Order
 
 @receiver(post_save, sender=Order)
 def post_save_order_signal(sender, instance, **kwargs):
+    discount = instance.get_discount()
     total_cost = instance.get_total_cost()
     Order.objects.filter(id=instance.id).update(total_cost=total_cost)
+    Order.objects.filter(id=instance.id).update(discount=discount)
