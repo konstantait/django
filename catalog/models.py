@@ -82,7 +82,7 @@ class Product(
 
     bookmarked_by = models.ManyToManyField(
         User,
-        through='Favorite',
+        related_name='favorites',
         blank=True
     )
 
