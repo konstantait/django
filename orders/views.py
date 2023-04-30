@@ -23,7 +23,6 @@ def order_create(request):
                     quantity=item['quantity'])
             order.save()
             cart.clear()
-            # asynchronous task send mail
             # order_created(order.id)
             return redirect('orders:payment', pk=order.id)
 

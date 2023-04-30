@@ -18,10 +18,6 @@ from core.constants import (
     CSV_IN_FIELD_ATTR_DELIMITER
 )
 
-from core.enums import (
-    RatingTypes
-)
-
 User = get_user_model()
 
 
@@ -84,6 +80,14 @@ class Product(
         unique=True
     )
 
+    bookmarked_by = models.ManyToManyField(
+        User,
+        related_name='favorites',
+        blank=True
+    )
+
+    bookmarks_count = models.PositiveIntegerField(default=0)
+
     categories = models.ManyToManyField(
         Category,
         related_name='products',
@@ -102,7 +106,7 @@ class Product(
     def get_main_category(self):
         return self.categories.order_by('sort_order').first()
 
-    def get_absolute_urls(self):
+    def get_absolute_url(self):
         categories = self.get_main_category()
         kwargs = {
             'category_slug': categories.slug,
@@ -132,28 +136,3 @@ class Product(
                 .values('attribute_group__name', 'name')
             )
         ]
-
-
-class Review(
-    BaseUUID,
-    BaseStatus,
-    BaseDateAddedModified
-):
-    author = models.ForeignKey(
-        User,
-        on_delete=models.CASCADE,
-        related_name='reviews',
-    )
-    product = models.ForeignKey(
-        Product,
-        on_delete=models.CASCADE,
-        related_name='reviews',
-    )
-    rating = models.PositiveSmallIntegerField(
-        choices=RatingTypes.choices,
-        default=RatingTypes.EXCELLENT
-    )
-    text = models.TextField(
-        blank=False,
-        null=False
-    )

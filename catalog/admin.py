@@ -5,7 +5,6 @@ from catalog.models import (
     AttributeGroup,
     Category,
     Product,
-    Review
 )
 from core.mixins.admin import BaseAdmin
 
@@ -34,8 +33,3 @@ class ProductAdmin(BaseAdmin):
     list_display = ('name', 'slug', 'model', 'sku', 'price', )
     ordering = ('slug', )
     prepopulated_fields = {'slug': ('name', )}
-
-
-@admin.register(Review)
-class ReviewAdmin(admin.ModelAdmin):
-    list_display = ('author', 'product', 'rating', 'text')

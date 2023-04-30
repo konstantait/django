@@ -1,5 +1,10 @@
-django
-python-dotenv
-flake8
-pillow
+django~=4.2
+python-decouple
 django-widget-tweaks
+django-debug-toolbar
+pillow
+flake8
+ipdb
+celery
+django-celery-results
+
