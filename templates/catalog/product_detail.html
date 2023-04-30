@@ -9,13 +9,18 @@
         <h5 class="card-title">{{ product.name }}</h5>
         <p class="card-text">{{ product.name }} {{ product.model }} ({{ product.sku }})</p>
         <hr>
-         <form action="{% url 'cart:cart_add' product.id %}" method="post">
-      {{ cart_product_form }}
-      {% csrf_token %}
-      <input class="btn-primary" type="submit" value="Add to cart">
-    </form>
+        <form action="{% url 'cart:add' product.id %}" method="post">
+          {{ cart_product_form }}
+          {% csrf_token %}
+          <input class="btn btn-outline-success" type="submit" value="Add to cart">
+        </form>
+        <form action="{% url 'favorites:add' product.id %}" method="post">
+          {% csrf_token %}
+          <input class="btn btn-outline-secondary" type="submit" value="Add to favorites">
+        </form>
         <h4 style="display: inline-block; float: right"><strong>${{product.price|floatformat:0}}</strong></h4>
       </div>
     </div>
   </div>
+</div>
 {% endblock content %}

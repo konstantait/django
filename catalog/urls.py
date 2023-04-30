@@ -5,19 +5,21 @@ from django.conf import settings
 from catalog.views import (
     ProductListView,
     ProductDetailView,
-    ExportCSV,
-    ImportCSV,
 )
 
 app_name = 'catalog'
 
 urlpatterns = [
-    path('<slug:category_slug>/', ProductListView.as_view(),
-         name='product_list'),
-    path('<slug:category_slug>/<slug:slug>/', ProductDetailView.as_view(),
-         name='product_detail'),
-    path('export/', ExportCSV.as_view(), name='export'),
-    path('import/', ImportCSV.as_view(), name='import'),
+    path(
+        '<slug:category_slug>/',
+        ProductListView.as_view(),
+        name='product_list'
+    ),
+    path(
+        '<slug:category_slug>/<slug:slug>/',
+        ProductDetailView.as_view(),
+        name='product_detail'
+    ),
 ]
 
 if settings.DEBUG:

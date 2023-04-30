@@ -1,0 +1,44 @@
+{% extends 'layouts/base.html' %}
+{% load static %}
+{% block content %}
+<div class="p-5">
+<h4>Favorites</h4>
+<table class="table align-middle">
+  <thead>
+  <tr>
+    <th scope="col"></th>
+    <th scope="col">Product</th>
+    <th scope="col"></th>
+    <th scope="col">Unit price</th>
+  </tr>
+  </thead>
+  <tbody>
+  {% for product in products %}
+  <tr>
+    <th scope="row">
+      <a href="{{ product.get_absolute_url }}">
+        <img src="{{ product.image.url }}" width="128">
+      </a>
+    </th>
+    <td>{{ product.name }}</td>
+    <td>
+      <form action="{% url 'favorite:remove' product.id %}" method="post">
+        <input class="btn btn-light" type="submit" value="Remove">
+        {% csrf_token %}
+      </form>
+    </td>
+    <td class="num">${{ product.price }}</td>
+  </tr>
+  {% endfor %}
+  </tbody>
+</table>
+<div class="d-grid gap-2 d-md-flex justify-content-md-begin">
+  <form action="{% url 'favorites:clear' %}" method="post">
+    <input class="btn btn-primary" type="submit" value="Clear">
+    {% csrf_token %}
+  </form>
+</div>
+</div>
+{% endblock %}
+
+

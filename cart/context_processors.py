@@ -1,5 +1,6 @@
-from .cart import Cart
+from cart.cart import Cart
+from core.settings import CART_SESSION_ID
 
 
 def cart(request):
-    return {'cart': Cart(request)}
+    return {CART_SESSION_ID: Cart(request)}

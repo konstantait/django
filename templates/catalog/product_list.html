@@ -11,7 +11,7 @@
         <p class="card-text">{{ product.name }} {{ product.model }} ({{ product.sku }})</p>
         <hr>
         <button class="btn btn-outline-secondary add-btn">Add to Cart</button>
-        <a class="btn btn-outline-success" href="{{ product.get_absolute_urls }}">View</a>
+        <a class="btn btn-outline-success" href="{{ product.get_absolute_url }}">View</a>
         <h4 style="display: inline-block; float: right"><strong>${{product.price|floatformat:0}}</strong></h4>
       </div>
     </div>
