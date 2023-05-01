@@ -5,7 +5,6 @@ from orders.models import Order
 
 @shared_task
 def order_created(order_id):
-    print('task')
     order = Order.objects.get(id=order_id)
     subject = f'Order nr. {order.id}'
     message = f'Dear {order.id},\n\n' \
@@ -13,6 +12,6 @@ def order_created(order_id):
               f'Your order ID is {order.id}.'
     mail_sent = send_mail(subject,
                           message,
-                          'admin@myshop.com',
+                          'orders@constanta.ua',
                           [order.email])
     return mail_sent

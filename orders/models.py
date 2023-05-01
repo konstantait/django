@@ -61,7 +61,7 @@ class Coupon(
             cost = (
                 cost - self.discount
                 if self.discount_type == DiscountTypes.FIXED else
-                cost - (cost / 100 * self.discount)
+                cost - (decimal.Decimal(cost * 0.1) * self.discount)
             ).quantize(decimal.Decimal('.01'))
         return cost
 

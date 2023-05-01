@@ -4,14 +4,6 @@
 <div class="p-5">
 <h4>Favorites</h4>
 <table class="table align-middle">
-  <thead>
-  <tr>
-    <th scope="col"></th>
-    <th scope="col">Product</th>
-    <th scope="col"></th>
-    <th scope="col">Unit price</th>
-  </tr>
-  </thead>
   <tbody>
   {% for product in products %}
   <tr>
@@ -22,7 +14,8 @@
     </th>
     <td>{{ product.name }}</td>
     <td>
-      <form action="{% url 'favorite:remove' product.id %}" method="post">
+      <form action="{% url 'favorites:remove' product.id %}" method="post">
+        <input type="hidden" name="next" value="{{ request.GET.next }}"/>
         <input class="btn btn-light" type="submit" value="Remove">
         {% csrf_token %}
       </form>

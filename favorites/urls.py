@@ -1,14 +1,13 @@
 from django.urls import path
 
-from favorites import views
-from favorites.views import FavoritesListView
+from favorites.views import List, Add, Remove, Clear
 
 app_name = 'favorites'
 
 urlpatterns = [
-    path('', FavoritesListView.as_view(), name='all'),
-    path('add/<uuid:product_id>/', views.add, name='add'),
-    path('remove/<uuid:product_id>/', views.add, name='remove'),
-    path('clear/', views.clear, name='clear'),
+    path('', List.as_view(), name='list'),
+    path('add/<uuid:product_id>/', Add.as_view(), name='add'),
+    path('remove/<uuid:product_id>/', Remove.as_view(), name='remove'),
+    path('clear/', Clear.as_view(), name='clear'),
 
 ]
