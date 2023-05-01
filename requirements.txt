@@ -7,4 +7,4 @@ flake8
 ipdb
 celery
 django-celery-results
-
+django-sendgrid-v5

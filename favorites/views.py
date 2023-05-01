@@ -55,3 +55,6 @@ class Clear(LoginRequiredMixin, RedirectView):
         self.request.user.favorites.clear()
         self.request.user.save()
         return super().get_redirect_url(*args, **kwargs)
+
+
+pass

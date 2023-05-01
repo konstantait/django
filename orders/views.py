@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from .models import OrderItem
 from .forms import OrderCreateForm
-# from .tasks import order_created
+from orders.tasks import order_created
 
 from django.views.generic.edit import UpdateView
 
@@ -23,7 +23,7 @@ def order_create(request):
                     quantity=item['quantity'])
             order.save()
             cart.clear()
-            # order_created(order.id)
+            task = order_created.delay(order.id) # noqa
             return redirect('orders:payment', pk=order.id)
 
     else:

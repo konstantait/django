@@ -1,7 +1,7 @@
 <div class="d-grid gap-2 d-md-flex justify-content-md-end">
   {% if user.is_authenticated %}
   <a class="btn btn-light me-md-2" href="{% url 'accounts:logout' %}" role="button">Logout</a>
-  <a class="btn btn-light me-md-2" href="{% url 'favorites:all' %}" role="button">Favorites</a>
+  <a class="btn btn-light me-md-2" href="{% url 'favorites:list' %}" role="button">Favorites</a>
   {% else %}
   <a class="{% if 'login' in request.path %}btn btn-primary{% else %}btn btn-light{% endif %}" href="{% url 'accounts:login' %}" role="button">Login</a>
   <a class="{% if 'signup' in request.path %}btn btn-primary{% else %}btn btn-light{% endif %}" href="{% url 'accounts:signup' %}" role="button">Signup</a>
