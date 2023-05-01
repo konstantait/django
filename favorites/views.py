@@ -1,49 +1,57 @@
-from django.views.generic import ListView
-
-from django.contrib.auth.decorators import login_required, user_passes_test  # noqa
+from django.urls import reverse_lazy
+from django.views.generic import ListView, RedirectView
+from django.shortcuts import get_object_or_404
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 from catalog.models import Product
 
-from django.shortcuts import redirect
-from django.views.decorators.http import require_POST
 
-
-class FavoritesListView(ListView):
+class List(LoginRequiredMixin, ListView):
     model = Product
     template_name = 'favorites/list.html'
     context_object_name = 'products'
+    login_url = reverse_lazy('accounts:login')
 
     def get_queryset(self):
         if self.request.user.pk:
             return Product.objects.filter(bookmarked_by=self.request.user.pk) # noqa
         return Product.objects.none()
 
-    def get(self, request, *args, **kwargs):
-        return super().get(request, *args, **kwargs)
+
+class Add(LoginRequiredMixin, RedirectView):
+    http_method_names = ['post']
+    url = reverse_lazy('favorites:list')
+    login_url = reverse_lazy('accounts:login')
+
+    def get_redirect_url(self, *args, **kwargs):
+        # product.get_absolute_url()
+        # request.META['HTTP_REFERER']
+        product = get_object_or_404(Product, pk=kwargs['product_id'])
+        if not product.bookmarked_by.filter(id=self.request.user.pk):
+            product.bookmarked_by.add(self.request.user)
+        product.save()
+        return super().get_redirect_url(*args, **kwargs)
 
 
-# from django.shortcuts import render, redirect, get_object_or_404
-# from django.views.decorators.http import require_POST
-# from catalog.models import Product
-# from .cart import Cart
-# from .forms import CartAddProductForm
+class Remove(LoginRequiredMixin, RedirectView):
+    http_method_names = ['post']
+    url = reverse_lazy('favorites:list')
+    login_url = reverse_lazy('accounts:login')
+
+    def get_redirect_url(self, *args, **kwargs):
+        product = get_object_or_404(Product, pk=kwargs['product_id'])
+        if product.bookmarked_by.filter(id=self.request.user.pk):
+            product.bookmarked_by.remove(self.request.user)
+        product.save()
+        return super().get_redirect_url(*args, **kwargs)
 
 
-@require_POST
-def add(request, product_id):
-    if request.user:
-        try:
-            Product.objects.get(bookmarked_by=request.user.pk)  # noqa
-        except Product.DoesNotExist:
-            Product.bookmarked_by.add(request.user)
-    return redirect('favorite:list')
+class Clear(LoginRequiredMixin, RedirectView):
+    http_method_names = ['post']
+    url = reverse_lazy('favorites:list')
+    login_url = reverse_lazy('accounts:login')
 
-
-@require_POST
-def remove(request, product_id):
-    return redirect('favorite:list')
-
-
-@require_POST
-def clear(request):
-    return redirect('favorite:list')
+    def get_redirect_url(self, *args, **kwargs):
+        self.request.user.favorites.clear()
+        self.request.user.save()
+        return super().get_redirect_url(*args, **kwargs)
