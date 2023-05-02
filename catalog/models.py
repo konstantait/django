@@ -112,7 +112,7 @@ class Product(
             'category_slug': categories.slug,
             'slug': self.slug
         }
-        url = reverse('catalog:product_detail', kwargs=kwargs)
+        url = reverse('catalog:detail', kwargs=kwargs)
         return url
 
     def get_categories(self):

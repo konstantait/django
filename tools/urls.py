@@ -2,7 +2,7 @@ from django.urls import path
 from django.conf.urls.static import static
 from django.conf import settings
 
-from exchange.views import LoadCSV, UploadCSV
+from tools.views import LoadCSV, UploadCSV
 
 app_name = 'exchange'
 

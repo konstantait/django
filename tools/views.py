@@ -15,7 +15,7 @@ from core.constants import (
 )
 
 from catalog.models import Product
-from exchange.forms import UploadCSVForm
+from tools.forms import UploadCSVForm
 
 
 class LoadCSV(View):
@@ -65,8 +65,8 @@ class LoadCSV(View):
 
 class UploadCSV(FormView):
     form_class = UploadCSVForm
-    template_name = 'exchange/upload.html'
-    success_url = reverse_lazy('home:index')
+    template_name = 'tools/upload.html'
+    success_url = reverse_lazy('catalog:home')
 
     @method_decorator(login_required)
     @method_decorator(user_passes_test(lambda u: u.is_staff))

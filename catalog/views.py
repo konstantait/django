@@ -7,7 +7,7 @@ from cart.forms import CartAddProductForm
 
 class ProductListView(ListView):
     model = Product
-    template_name = 'catalog/product_list.html'
+    template_name = 'catalog/list.html'
     context_object_name = 'products'
     extra_context = {'category': Product.get_main_category}
 
@@ -17,7 +17,7 @@ class ProductListView(ListView):
 
 class ProductDetailView(DetailView):
     model = Product
-    template_name = 'catalog/product_detail.html'
+    template_name = 'catalog/detail.html'
     context_object_name = 'product'
     extra_context = {'category': Product.get_main_category}
 

@@ -10,7 +10,7 @@ class List(LoginRequiredMixin, ListView):
     model = Product
     template_name = 'favorites/list.html'
     context_object_name = 'products'
-    login_url = reverse_lazy('accounts:login')
+    login_url = reverse_lazy('profiles:login')
 
     def get_queryset(self):
         if self.request.user.pk:
@@ -21,7 +21,7 @@ class List(LoginRequiredMixin, ListView):
 class Add(LoginRequiredMixin, RedirectView):
     http_method_names = ['post']
     url = reverse_lazy('favorites:list')
-    login_url = reverse_lazy('accounts:login')
+    login_url = reverse_lazy('profiles:login')
 
     def get_redirect_url(self, *args, **kwargs):
         # product.get_absolute_url()
@@ -36,7 +36,7 @@ class Add(LoginRequiredMixin, RedirectView):
 class Remove(LoginRequiredMixin, RedirectView):
     http_method_names = ['post']
     url = reverse_lazy('favorites:list')
-    login_url = reverse_lazy('accounts:login')
+    login_url = reverse_lazy('profiles:login')
 
     def get_redirect_url(self, *args, **kwargs):
         product = get_object_or_404(Product, pk=kwargs['product_id'])
@@ -49,12 +49,9 @@ class Remove(LoginRequiredMixin, RedirectView):
 class Clear(LoginRequiredMixin, RedirectView):
     http_method_names = ['post']
     url = reverse_lazy('favorites:list')
-    login_url = reverse_lazy('accounts:login')
+    login_url = reverse_lazy('profiles:login')
 
     def get_redirect_url(self, *args, **kwargs):
         self.request.user.favorites.clear()
         self.request.user.save()
         return super().get_redirect_url(*args, **kwargs)
-
-
-pass
