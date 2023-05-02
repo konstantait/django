@@ -7,6 +7,8 @@ from django.core.management.utils import get_random_secret_key
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+CURRENCY_NATIONAL_CODE = config('CURRENCY_NATIONAL_CODE', default='UAH')
+
 DEBUG = config('DEBUG', default=True, cast=bool)
 SECRET_KEY = config('SECRET_KEY', default=get_random_secret_key())
 ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='127.0.0.1', cast=Csv())
@@ -21,8 +23,8 @@ EMAIL_BACKEND = "sendgrid_backend.SendgridBackend"
 SENDGRID_API_KEY = config('SENDGRID_API_KEY', default='')
 SENDGRID_SANDBOX_MODE_IN_DEBUG = config('SENDGRID_SANDBOX_MODE_IN_DEBUG', default=True) # noqa
 
-LOGIN_REDIRECT_URL = 'home:index'
-LOGOUT_REDIRECT_URL = 'home:index'
+LOGIN_REDIRECT_URL = 'catalog:home'
+LOGOUT_REDIRECT_URL = 'catalog:home'
 
 CART_SESSION_ID = 'cart'
 
@@ -35,11 +37,12 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django_celery_results',
     'widget_tweaks',
-    'accounts',
     'catalog',
     'cart',
+    'currencies',
     'favorites',
     'orders',
+    'profiles',
     'reviews',
 ]
 

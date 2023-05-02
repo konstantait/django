@@ -5,14 +5,13 @@ from django.conf import settings
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('accounts/', include('accounts.urls', namespace='accounts')),
     path('cart/', include('cart.urls', namespace='cart')),
-    path('catalog/', include('catalog.urls', namespace='catalog')),
     path('favorites/', include('favorites.urls', namespace='favorites')),
     path('orders/', include('orders.urls', namespace='orders')),
+    path('profiles/', include('profiles.urls', namespace='profiles')),
     path('reviews/', include('reviews.urls', namespace='reviews')),
-    path('exchange/', include('exchange.urls', namespace='exchange')),
-    path('', include('home.urls', namespace='home')),
+    path('tools/', include('tools.urls', namespace='exchange')),
+    path('', include('catalog.urls', namespace='catalog')),
 ]
 
 if settings.DEBUG:

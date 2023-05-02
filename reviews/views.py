@@ -11,7 +11,7 @@ class ReviewFormView(FormView):
     template_name = 'reviews/form.html'
     form_class = ReviewForm
 
-    @method_decorator(login_required(login_url=reverse_lazy('accounts:login')))
+    @method_decorator(login_required(login_url=reverse_lazy('profiles:login')))
     def dispatch(self, request, *args, **kwargs):
         return super().dispatch(request, *args, **kwargs)
 

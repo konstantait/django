@@ -55,7 +55,7 @@
       <input class="btn btn-primary" type="submit" value="Clear">
       {% csrf_token %}
     </form>
-    <a class="btn btn-primary" href="{% url 'home:index' %}" role="button">Continue</a>
+    <a class="btn btn-primary" href="{% url 'catalog:home' %}" role="button">Continue</a>
     <a class="btn btn-primary" href="{% url 'orders:order_create' %}" role="button">Checkout</a>
   </div>
 </div>

@@ -5,10 +5,10 @@
         <div class="col-md-10 mx-auto col-lg-5">
             <div class="text-center mb-4">
                 <h1>Sign up</h1>
-                <p>Already have account? <a href="{% url 'accounts:login' %}">Login</a></p>
+                <p>Already have account? <a href="{% url 'profiles:login' %}">Login</a></p>
             </div>
             <form class="p-2 p-md-5 border rounded-3 bg-light" method="post">
-                {% include 'accounts/form.html' with form=form %}
+                {% include 'profiles/form.html' with form=form %}
                 <button class="w-100 btn btn-lg btn-primary" type="submit">Sign up</button>
             </form>
         </div>
