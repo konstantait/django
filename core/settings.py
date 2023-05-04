@@ -3,6 +3,7 @@ import os
 from pathlib import Path
 from decouple import config, Csv
 from django.core.management.utils import get_random_secret_key
+from celery.schedules import crontab
 
 
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -16,7 +17,16 @@ ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='127.0.0.1', cast=Csv())
 CELERY_BROKER_URL = 'redis://localhost:6379/0'
 # CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'
 CELERY_RESULT_BACKEND = 'django-db'
-
+CELERY_BEAT_SCHEDULE = {
+    'Get currencies privat': {
+        'task': 'currencies.tasks.get_currencies_privat',
+        'schedule': crontab(hour='13', minute='40'),
+    },
+    'Get currencies mono': {
+        'task': 'currencies.tasks.get_currencies_mono',
+        'schedule': crontab(hour='13', minute='41'),
+    },
+}
 
 # EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 EMAIL_BACKEND = "sendgrid_backend.SendgridBackend"
@@ -36,6 +46,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django_celery_results',
+    'django_celery_beat',
     'widget_tweaks',
     'catalog',
     'cart',
