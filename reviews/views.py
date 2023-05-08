@@ -3,6 +3,7 @@ from django.views.generic import CreateView, ListView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.cache import cache
 
+from core.enums import CacheKeys
 from reviews.forms import ReviewForm
 from reviews.models import Review
 
@@ -25,11 +26,11 @@ class ReviewList(ListView):
     context_object_name = 'reviews'
 
     def get_queryset(self):
-        queryset = cache.get('reviews:all')
+        queryset = cache.get(CacheKeys.REVIEWS_ALL)
         if not queryset:
             print('caching')
             queryset = Review.objects.all()
-            cache.set('reviews:all', queryset)
+            cache.set(CacheKeys.REVIEWS_ALL, queryset)
         ordering = self.get_ordering()
         if ordering:
             if isinstance(ordering, str):

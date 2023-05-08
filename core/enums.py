@@ -1,4 +1,4 @@
-from django.db.models import IntegerChoices
+from django.db.models import IntegerChoices, TextChoices
 
 
 class DiscountTypes(IntegerChoices):
@@ -17,3 +17,7 @@ class RatingTypes(IntegerChoices):
     GOOD = 2, 'Good'
     VERY_GOOD = 3, 'Very good'
     EXCELLENT = 4, 'Excellent'
+
+
+class CacheKeys(TextChoices):
+    REVIEWS_ALL = 'reviews:all', 'Reviews all'
