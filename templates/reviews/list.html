@@ -1,18 +1,7 @@
 {% extends 'layouts/base.html' %}
 {% load static %}
 {% block content %}
-<form method="post">
-    {% csrf_token %}
-    <fieldset>
-    <legend>Post a review</legend>
-    {{ form.as_div }}
-    <br>
-    <input type="submit" value="Post">
-    </fieldset>
-</form>
-<br>
-<br>
-<h5 >Reviews:</h5>
+<h5>Reviews</h5>
 <ul>
     {% for review in reviews %}
     <li>[{{ review.product }}] {{ review.text }} ({{ review.author }}, {{ review.get_rating_display }})</li>

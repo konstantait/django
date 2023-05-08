@@ -11,3 +11,5 @@ django-celery-results
 django-sendgrid-v5
 requests~=2.28.2
 django-celery-beat
+django-lifecycle
+django-redisboard

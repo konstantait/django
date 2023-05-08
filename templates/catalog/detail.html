@@ -23,4 +23,10 @@
     </div>
   </div>
 </div>
+<h5>Reviews</h5>
+<ul>
+    {% for review in reviews %}
+    <li>[{{ review.product }}] {{ review.text }} ({{ review.author }}, {{ review.get_rating_display }})</li>
+    {% endfor %}
+</ul>
 {% endblock content %}

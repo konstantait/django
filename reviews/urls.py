@@ -2,12 +2,13 @@ from django.urls import path
 from django.conf.urls.static import static
 from django.conf import settings
 
-from reviews.views import ReviewFormView
+from reviews.views import ReviewList, ReviewCreate
 
 app_name = 'reviews'
 
 urlpatterns = [
-    path('', ReviewFormView.as_view(), name='create'),
+    path('', ReviewList.as_view(), name='list'),
+    path('create', ReviewCreate.as_view(), name='create'),
 ]
 
 if settings.DEBUG:
