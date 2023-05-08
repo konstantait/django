@@ -1,0 +1,13 @@
+{% extends 'layouts/base.html' %}
+{% load static %}
+{% block content %}
+<form method="post">
+    {% csrf_token %}
+    <fieldset>
+    <legend>Post a review</legend>
+    {{ form.as_div }}
+    <br>
+    <input type="submit" value="Post">
+    </fieldset>
+</form>
+{% endblock content %}

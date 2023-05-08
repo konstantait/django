@@ -1,5 +1,12 @@
 from django.db import models
+from django.core.cache import cache
 from django.contrib.auth import get_user_model
+from django_lifecycle import (
+    LifecycleModelMixin,
+    hook,
+    AFTER_CREATE,
+    AFTER_UPDATE
+)
 
 from core.mixins.models import (
     BaseUUID,
@@ -18,6 +25,7 @@ User = get_user_model()
 
 
 class Review(
+    LifecycleModelMixin,
     BaseUUID,
     BaseStatus,
     BaseDateAddedModified
@@ -40,3 +48,9 @@ class Review(
         blank=False,
         null=False
     )
+
+    @hook(AFTER_CREATE)
+    @hook(AFTER_UPDATE)
+    def after_review_create_or_update(self):
+        print('clear cache')
+        cache.delete('reviews:all')
