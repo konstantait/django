@@ -13,9 +13,8 @@ from core.mixins.models import (
     BaseStatus,
     BaseDateAddedModified
 )
-
-
 from core.enums import (
+    CacheKeys,
     RatingTypes
 )
 
@@ -53,4 +52,4 @@ class Review(
     @hook(AFTER_UPDATE)
     def after_review_create_or_update(self):
         print('clear cache')
-        cache.delete('reviews:all')
+        cache.delete(CacheKeys.REVIEWS_ALL)
