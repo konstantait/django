@@ -30,6 +30,7 @@ class ReviewList(ListView):
         if not queryset:
             print('caching')
             queryset = Review.objects.all()
+            print(queryset)
             cache.set(CacheKeys.REVIEWS_ALL, queryset)
         ordering = self.get_ordering()
         if ordering:
