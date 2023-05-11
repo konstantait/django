@@ -1,6 +1,5 @@
 from django.db import models
 from django.core.cache import cache
-from django.contrib.auth import get_user_model
 from django_lifecycle import (
     LifecycleModelMixin,
     hook,
@@ -17,10 +16,9 @@ from core.enums import (
     CacheKeys,
     RatingTypes
 )
+from core.settings import AUTH_USER_MODEL
 
 from catalog.models import Product
-
-User = get_user_model()
 
 
 class Review(
@@ -30,7 +28,7 @@ class Review(
     BaseDateAddedModified
 ):
     author = models.ForeignKey(
-        User,
+        AUTH_USER_MODEL,
         on_delete=models.CASCADE,
         related_name='reviews',
     )

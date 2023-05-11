@@ -35,8 +35,16 @@ SENDGRID_SANDBOX_MODE_IN_DEBUG = config('SENDGRID_SANDBOX_MODE_IN_DEBUG', defaul
 
 LOGIN_REDIRECT_URL = 'catalog:home'
 LOGOUT_REDIRECT_URL = 'catalog:home'
+AUTH_USER_MODEL = 'profiles.User'
+AUTHENTICATION_BACKENDS = [
+    "profiles.backends.EmailBackend", "profiles.backends.PhoneBackend"
+]
 
 CART_SESSION_ID = 'cart'
+
+PHONENUMBER_DB_FORMAT = 'INTERNATIONAL'
+PHONENUMBER_DEFAULT_REGION = 'UA'
+
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -48,6 +56,7 @@ INSTALLED_APPS = [
     'redisboard',
     'django_celery_results',
     'django_celery_beat',
+    'phonenumber_field',
     'widget_tweaks',
     'catalog',
     'cart',
