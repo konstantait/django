@@ -1,7 +1,7 @@
-# from django.contrib import admin
-# from profiles.models import Profile
+from django.contrib import admin
+from profiles.models import User
 
 
-# @admin.register(Profile)
-# class ProfileAdmin(admin.ModelAdmin):
-#     list_display = ['phone', 'location', 'shipping']
+@admin.register(User)
+class UserAdmin(admin.ModelAdmin):
+    list_display = ('email', 'phone', 'is_active')

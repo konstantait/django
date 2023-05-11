@@ -1,5 +1,5 @@
 from django.db import models
-from django.contrib.auth import get_user_model
+# from django.contrib.auth import get_user_model
 from django.urls import reverse
 
 from core.mixins.models import (
@@ -18,7 +18,7 @@ from core.constants import (
     CSV_IN_FIELD_ATTR_DELIMITER
 )
 
-User = get_user_model()
+from core.settings import AUTH_USER_MODEL
 
 
 class AttributeGroup(
@@ -81,7 +81,7 @@ class Product(
     )
 
     bookmarked_by = models.ManyToManyField(
-        User,
+        AUTH_USER_MODEL,
         related_name='favorites',
         blank=True
     )
