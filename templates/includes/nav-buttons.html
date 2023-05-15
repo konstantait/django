@@ -2,9 +2,10 @@
   {% if user.is_authenticated %}
   <a class="btn btn-light me-md-2" href="{% url 'profiles:logout' %}" role="button">Logout</a>
   <a class="btn btn-light me-md-2" href="{% url 'favorites:list' %}" role="button">Favorites</a>
+  <a class="{% if 'profiles' in request.path %}btn btn-primary{% else %}btn btn-light{% endif %} me-md-2" href="{% url 'profiles:update' user.id %}" role="button">Profile</a>
   {% else %}
-  <a class="{% if 'login' in request.path %}btn btn-primary{% else %}btn btn-light{% endif %}" href="{% url 'profiles:login' %}" role="button">Login</a>
-  <a class="{% if 'signup' in request.path %}btn btn-primary{% else %}btn btn-light{% endif %}" href="{% url 'profiles:signup' %}" role="button">Signup</a>
+  <a class="{% if 'login' in request.path %}btn btn-primary{% else %}btn btn-light{% endif %} me-md-2" href="{% url 'profiles:login' %}" role="button">Login</a>
+  <a class="{% if 'signup' in request.path %}btn btn-primary{% else %}btn btn-light{% endif %} me-md-2" href="{% url 'profiles:signup' %}" role="button">Signup</a>
   {% endif %}
   <a class="btn btn-info" href="{% url 'cart:detail' %}" role="button">{{ cart|length }} item, ${{ cart.get_total_price }}</a>
 </div>
