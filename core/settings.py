@@ -34,7 +34,7 @@ SENDGRID_API_KEY = config('SENDGRID_API_KEY', default='')
 SENDGRID_SANDBOX_MODE_IN_DEBUG = config('SENDGRID_SANDBOX_MODE_IN_DEBUG', default=True) # noqa
 
 LOGIN_REDIRECT_URL = 'catalog:home'
-LOGOUT_REDIRECT_URL = 'catalog:home'
+LOGOUT_REDIRECT_URL = 'profiles:login'
 AUTH_USER_MODEL = 'profiles.User'
 AUTHENTICATION_BACKENDS = [
     "profiles.backends.EmailBackend", "profiles.backends.PhoneBackend"

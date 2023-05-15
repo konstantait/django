@@ -1,0 +1,19 @@
+{% extends 'layouts/base.html' %}
+{% block content %}
+<div class="container col-xl-10 col-xxl-8 px-4 py-5">
+    <div class="row align-items-center g-lg-5 py-5">
+        <div class="col-md-10 mx-auto col-lg-5">
+            <div class="text-center mb-4">
+                <h1>Phone verification</h1>
+                <p>A secret key has been sent to your phone.<br>It will be valid for one minute.</p>
+            </div>
+            <form class="p-2 p-md-5 border rounded-3 bg-light" method="post">
+                {% include 'profiles/form.html' with form=form %}
+                <button class="w-100 btn btn-lg btn-primary" type="submit">Submit</button>
+                <a class="w-100 btn btn-lg btn-primary mt-2" href="{% url 'profiles:login' %}" role="button">Skip</a>
+            </form>
+
+        </div>
+    </div>
+</div>
+{% endblock content %}
