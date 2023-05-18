@@ -2,9 +2,6 @@ from django import forms
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 from django.utils.translation import gettext_lazy as _
 from phonenumber_field.formfields import PhoneNumberField
-# from django.core.exceptions import ValidationError
-# from django.core.validators import validate_email
-# from phonenumber_field.validators import validate_international_phonenumber
 
 from profiles.models import User
 
@@ -47,13 +44,6 @@ class SignupForm(UserCreationForm):
         if User.objects.filter(phone=phone, is_phone_valid=True).exists():
             raise forms.ValidationError('User with that phone already exists')
         return phone
-
-    # def save(self, commit=True):
-    #     user = super().save(commit=False)
-    #     user.username = self.cleaned_data['email'].split("@")[0]
-    #     if commit:
-    #         user.save()
-    #     return user
 
 
 class PhoneVerificationForm(forms.Form):

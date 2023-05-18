@@ -1,6 +1,4 @@
 from django.db import models
-# from django.contrib.auth import get_user_model
-from django.urls import reverse
 
 from core.mixins.models import (
     BaseUUID,
@@ -55,6 +53,9 @@ class Category(
     BaseSortOrder,
     BaseDateAddedModified
 ):
+    class Meta:
+        default_related_name = 'categories'
+
     def __str__(self):
         return self.name
 
@@ -103,17 +104,17 @@ class Product(
     def __str__(self):
         return self.name
 
-    def get_main_category(self):
-        return self.categories.order_by('sort_order').first()
-
-    def get_absolute_url(self):
-        categories = self.get_main_category()
-        kwargs = {
-            'category_slug': categories.slug,
-            'slug': self.slug
-        }
-        url = reverse('catalog:detail', kwargs=kwargs)
-        return url
+    # def get_main_category(self):
+    #     return self.categories.order_by('sort_order').first()
+    #
+    # def get_absolute_url(self):
+    #     categories = self.get_main_category()
+    #     kwargs = {
+    #         'category_slug': categories.slug,
+    #         'slug': self.slug
+    #     }
+    #     url = reverse('catalog:detail', kwargs=kwargs)
+    #     return url
 
     def get_categories(self):
         return [
