@@ -5,11 +5,10 @@ flake8
 ipdb
 requests
 django-debug-toolbar
+django-silk
 django-widget-tweaks
 django-lifecycle
 celery[redis]
 django-celery-results
-django-celery-beat
-django-sendgrid-v5
 django-redisboard
 django-phonenumber-field[phonenumberslite]

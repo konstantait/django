@@ -1,7 +1,9 @@
+# from django.db.models import Prefetch
 from django.views.generic import ListView, DetailView
 
 from django.contrib.auth.decorators import login_required, user_passes_test  # noqa
 from catalog.models import Product
+from currencies.models import Currency
 from reviews.models import Review
 from cart.forms import CartAddProductForm
 
@@ -12,7 +14,24 @@ class ProductListView(ListView):
     context_object_name = 'products'
 
     def get_queryset(self):
-        return Product.objects.filter(categories__slug=self.kwargs['category_slug']) # noqa
+        # categories = Category.objects.filter(slug=self.kwargs['category_slug']) # noqa
+        # products = Product.objects.prefetch_related(Prefetch('categories', queryset=categories)) # noqa
+        # return products
+        products = Product.objects.filter(categories__slug=self.kwargs['category_slug']) # noqa
+        converting = Currency.objects.get(code='UAH')
+        for product in products:
+            left = converting.symbol_left
+            right = converting.symbol_right
+            precision = converting.decimal_place
+            value = product.price * converting.rate
+            product.price_currency = f'{left}{value:0.{precision}f}{right}'
+        return products
+        # return Product.objects.filter(categories__slug=self.kwargs['category_slug']) # noqa
+
+    # def get_context_data(self, **kwargs):
+    #     context = super().get_context_data(**kwargs)
+    #     context['category'] = self.kwargs['category_slug']
+    #     return context
 
 
 class ProductDetailView(DetailView):

@@ -28,11 +28,6 @@ CELERY_BEAT_SCHEDULE = {
     },
 }
 
-# EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-EMAIL_BACKEND = "sendgrid_backend.SendgridBackend"
-SENDGRID_API_KEY = config('SENDGRID_API_KEY', default='')
-SENDGRID_SANDBOX_MODE_IN_DEBUG = config('SENDGRID_SANDBOX_MODE_IN_DEBUG', default=True) # noqa
-
 LOGIN_REDIRECT_URL = 'catalog:home'
 LOGOUT_REDIRECT_URL = 'profiles:login'
 AUTH_USER_MODEL = 'profiles.User'
@@ -45,6 +40,7 @@ CART_SESSION_ID = 'cart'
 PHONENUMBER_DB_FORMAT = 'INTERNATIONAL'
 PHONENUMBER_DEFAULT_REGION = 'UA'
 
+INTERNAL_IPS = config('INTERNAL_IPS', default='127.0.0.1', cast=Csv())
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -53,6 +49,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'silk',
+    'debug_toolbar',
     'redisboard',
     'django_celery_results',
     'django_celery_beat',
@@ -60,6 +58,8 @@ INSTALLED_APPS = [
     'widget_tweaks',
     'catalog',
     'cart',
+    'contacts',
+    'core',
     'currencies',
     'favorites',
     'orders',
@@ -75,7 +75,10 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'silk.middleware.SilkyMiddleware',
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
 ]
+
 
 ROOT_URLCONF = 'core.urls'
 
@@ -126,6 +129,16 @@ CACHES = {
         "LOCATION": "redis://127.0.0.1:6379",
     }
 }
+
+# EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+EMAIL_HOST = config('EMAIL_HOST', default='EMAIL_HOST')
+EMAIL_PORT = config('EMAIL_PORT', default='EMAIL_PORT')
+EMAIL_HOST_USER = config('EMAIL_HOST_USER', default='EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD', default='EMAIL_HOST_PASSWORD') # noqa
+EMAIL_USE_TLS = config('EMAIL_USE_TLS', default=True, cast=bool)
+# EMAIL_USE_SSL = config('EMAIL_USE_SSL', default=True, cast=bool)
+
 LANGUAGE_CODE = 'en-us'
 TIME_ZONE = 'UTC'
 USE_I18N = True
@@ -138,21 +151,21 @@ MEDIA_ROOT = 'media'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-if DEBUG:
-    MIDDLEWARE += [
-        'debug_toolbar.middleware.DebugToolbarMiddleware',
-    ]
-    INSTALLED_APPS += [
-        'debug_toolbar',
-    ]
-    INTERNAL_IPS = config('INTERNAL_IPS', default='127.0.0.1', cast=Csv())
-
-    import mimetypes
-    mimetypes.add_type("application/javascript", ".js", True)
-
-    DEBUG_TOOLBAR_CONFIG = {
-        'INTERCEPT_REDIRECTS': False,
-    }
+# if DEBUG:
+#     MIDDLEWARE += [
+#         'debug_toolbar.middleware.DebugToolbarMiddleware',
+#     ]
+#     INSTALLED_APPS += [
+#         'debug_toolbar',
+#     ]
+#     INTERNAL_IPS = config('INTERNAL_IPS', default='127.0.0.1', cast=Csv())
+#
+#     import mimetypes
+#     mimetypes.add_type("application/javascript", ".js", True)
+#
+#     DEBUG_TOOLBAR_CONFIG = {
+#         'INTERCEPT_REDIRECTS': False,
+#     }
 
 # LOGGING = {
 #     'version': 1,

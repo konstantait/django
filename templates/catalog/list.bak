@@ -1,5 +1,6 @@
 {% extends 'layouts/base.html' %}
 {% load static %}
+<!--{% load currency_extras %}-->
 {% block content %}
 <div class="row row-cols-1 row-cols-md-3 g-4">
   {% for product in products %}
@@ -13,6 +14,7 @@
         <button class="btn btn-outline-secondary add-btn">Add to Cart</button>
         <a class="btn btn-outline-success" href="{{ request.path }}{{ product.slug }}">View</a>
         <h4 style="display: inline-block; float: right"><strong> {{product.price_currency}} </strong></h4>
+<!--        <h4 style="display: inline-block; float: right"><strong>{{product.price|currency:"UAH"}}</strong></h4>-->
       </div>
     </div>
   </div>

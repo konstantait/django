@@ -23,6 +23,17 @@ def update_currency_rate(rates, bank_name):
             print(bank_name, currency.code, currency.rate)
 
 
+@shared_task
+def get_currencies_privat():
+    rates = privat.exchange()
+    update_currency_rate(rates, 'privat')
+
+
+@shared_task
+def get_currencies_mono():
+    rates = mono.exchange()
+    update_currency_rate(rates, 'mono')
+
 # {'code': 'UAH', 'rate': '1.00000'}
 #
 # {'code': 'EUR', 'rate': '41.50000'}
@@ -48,14 +59,3 @@ def update_currency_rate(rates, bank_name):
 # new_rate_UAH = rate / rate_UAH
 # new_rate_EUR = 1
 # new_rate_USD = rate / rate_USD
-
-@shared_task
-def get_currencies_privat():
-    rates = privat.exchange()
-    update_currency_rate(rates, 'privat')
-
-
-@shared_task
-def get_currencies_mono():
-    rates = mono.exchange()
-    update_currency_rate(rates, 'mono')

@@ -16,7 +16,7 @@ def hash_key(key):
     return salt + key_hash
 
 
-def verify_pass(provided_key, stored_key):
+def verify_key(provided_key, stored_key):
     stored_key = stored_key.decode('ascii')
     salt = stored_key[:64]
     stored_key = stored_key[64:]
@@ -58,7 +58,7 @@ def verify_key_hash_from_session(request, secret_key=None):
     if phone and secret_key_hash and secret_key_timestamp:
         secret_key_timestamp = datetime.strptime(secret_key_timestamp, '%Y-%m-%d %H:%M:%S') # noqa
         now_timestamp = datetime.now()
-        is_valid = verify_pass(secret_key, secret_key_hash.encode('utf-8'))
+        is_valid = verify_key(secret_key, secret_key_hash.encode('utf-8'))
         is_valid &= (now_timestamp - secret_key_timestamp).total_seconds() < 60
         if not is_valid:
             return None
