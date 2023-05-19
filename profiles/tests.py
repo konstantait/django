@@ -21,7 +21,7 @@ def test_login(client, faker):
     response = client.post(url, data=data)
     assert response.status_code == 200
     assert response.context['form'].errors['__all__'] == [
-        'Please enter a correct email address and password. Note that both fields may be case-sensitive.']
+        'Please enter a correct email address and password. Note that both fields may be case-sensitive.'] # noqa
 
     password = faker.word()
     user, _ = User.objects.get_or_create(
