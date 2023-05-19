@@ -130,7 +130,6 @@ CACHES = {
     }
 }
 
-# EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 EMAIL_HOST = config('EMAIL_HOST', default='EMAIL_HOST')
 EMAIL_PORT = config('EMAIL_PORT', default='EMAIL_PORT')
