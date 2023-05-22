@@ -12,12 +12,11 @@ def test_login(client, faker):
     data = {}
     response = client.post(url, data=data)
     assert response.status_code == 200
-
     assert all(v == ['This field is required.']
                for v in response.context['form'].errors.values())
+
     data['username'] = faker.email()
     data['password'] = faker.word()
-
     response = client.post(url, data=data)
     assert response.status_code == 200
     assert response.context['form'].errors['__all__'] == [
