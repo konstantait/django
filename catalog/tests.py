@@ -1,8 +1,12 @@
 from django.urls import reverse_lazy
+from django.contrib.auth import get_user_model
 
 from catalog.models import Category, Product
 from currencies.models import Currency
+from reviews.models import Review
 from core.constants import MAX_DIGITS, DECIMAL_PLACES
+
+User = get_user_model()
 
 
 def test_products_list(client, faker):
@@ -30,6 +34,7 @@ def test_products_list(client, faker):
             )
         )
         product.categories.set([category])
+
     url = reverse_lazy('catalog:list', kwargs={'category_slug': f'{category_slug}'}) # noqa
     response = client.get(url)
     assert response.status_code == 200
@@ -43,6 +48,7 @@ def test_product_detail(client, faker):
         name=category_name,
         slug=category_slug,
     )
+
     Currency.objects.create(code='USD', rate=1)
     Currency.objects.create(code='EUR', rate=0.9)
     Currency.objects.create(code='UAH', rate=37)
@@ -60,6 +66,17 @@ def test_product_detail(client, faker):
         )
     )
     product.categories.set([category])
+
+    user, _ = User.objects.get_or_create(
+        email=faker.email(),
+    )
+    for _ in range(3):
+        Review.objects.create(
+            author=user,
+            product=product,
+            text=faker.word(),
+            )
+
     url = reverse_lazy('catalog:detail',
                        kwargs={
                            'category_slug': f'{category_slug}',
@@ -67,3 +84,4 @@ def test_product_detail(client, faker):
                        }) # noqa
     response = client.get(url)
     assert response.status_code == 200
+    assert len(response.context['reviews']) == Review.objects.count()
