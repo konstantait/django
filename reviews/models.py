@@ -27,27 +27,15 @@ class Review(
     BaseStatus,
     BaseDateAddedModified
 ):
-    author = models.ForeignKey(
-        AUTH_USER_MODEL,
-        on_delete=models.CASCADE,
-        related_name='reviews',
-    )
-    product = models.ForeignKey(
-        Product,
-        on_delete=models.CASCADE,
-        related_name='reviews',
-    )
-    rating = models.PositiveSmallIntegerField(
-        choices=RatingTypes.choices,
-        default=RatingTypes.EXCELLENT
-    )
-    text = models.TextField(
-        blank=False,
-        null=False
-    )
+    author = models.ForeignKey(AUTH_USER_MODEL, on_delete=models.CASCADE) # noqa
+    product = models.ForeignKey(Product, on_delete=models.CASCADE) # noqa
+    rating = models.PositiveSmallIntegerField(choices=RatingTypes.choices, default=RatingTypes.EXCELLENT) # noqa
+    text = models.TextField(blank=False, null=False)
+
+    class Meta:
+        default_related_name = 'reviews'
 
     @hook(AFTER_CREATE)
     @hook(AFTER_UPDATE)
     def after_review_create_or_update(self):
-        print('clear cache')
         cache.delete(CacheKeys.REVIEWS_ALL)

@@ -4,7 +4,7 @@ from django.urls import reverse_lazy
 User = get_user_model()
 
 
-def test_login(client, faker):
+def test_login(client, faker, user_factory):
     url = reverse_lazy('profiles:login')
     response = client.get(url)
     assert response.status_code == 200
@@ -23,9 +23,7 @@ def test_login(client, faker):
         'Please enter a correct email address and password. Note that both fields may be case-sensitive.'] # noqa
 
     password = faker.word()
-    user, _ = User.objects.get_or_create(
-        email=faker.email(),
-    )
+    user = user_factory()
     user.set_password(password)
     user.save()
 
@@ -36,7 +34,7 @@ def test_login(client, faker):
     assert response.status_code == 302
 
 
-def test_signup(client, faker):
+def test_signup(client, faker, user_factory):
     url = reverse_lazy('profiles:signup')
     response = client.get(url)
     assert response.status_code == 200
@@ -47,9 +45,7 @@ def test_signup(client, faker):
     assert all(v == ['This field is required.']
                for v in response.context['form'].errors.values())
 
-    user, _ = User.objects.get_or_create(
-        email=faker.email(),
-    )
+    user = user_factory()
     password = faker.word()
     data = {
         'email': user.email,

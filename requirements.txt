@@ -8,6 +8,8 @@ django-debug-toolbar
 django-silk
 faker
 pytest-django
+pytest-cov
+pytest-factoryboy
 django-widget-tweaks
 django-lifecycle
 celery[redis]

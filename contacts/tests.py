@@ -9,8 +9,7 @@ def test_contacts_send(client, faker):
     data = {}
     response = client.post(url, data=data)
     assert response.status_code == 200
-    assert all(v == ['This field is required.']
-               for v in response.context['form'].errors.values())
+    assert all(v == ['This field is required.'] for v in response.context['form'].errors.values()) # noqa
 
     data['email'] = 'faker.email()'
     data['text'] = faker.word()
