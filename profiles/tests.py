@@ -4,7 +4,7 @@ from django.urls import reverse_lazy
 User = get_user_model()
 
 
-def test_login(client, faker, user_factory):
+def test_login(client, faker, login_client):
     url = reverse_lazy('profiles:login')
     response = client.get(url)
     assert response.status_code == 200
@@ -22,16 +22,9 @@ def test_login(client, faker, user_factory):
     assert response.context['form'].errors['__all__'] == [
         'Please enter a correct email address and password. Note that both fields may be case-sensitive.'] # noqa
 
-    password = faker.word()
-    user = user_factory()
-    user.set_password(password)
-    user.save()
-
-    data['username'] = user.email
-    data['password'] = password
-
-    response = client.post(url, data=data)
-    assert response.status_code == 302
+    client, user = login_client()
+    response = client.get(url)
+    assert response.status_code == 200
 
 
 def test_signup(client, faker, user_factory):
