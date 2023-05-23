@@ -4,8 +4,10 @@ import pytest
 import factory.django
 from pytest_factoryboy import register
 from django.contrib.auth import get_user_model
+from django.urls import reverse_lazy
 
 from core.constants import DECIMAL_PLACES
+from core.settings import SECRET_KEY
 from catalog.models import Category, Product
 from currencies.models import Currency
 from reviews.models import Review
@@ -35,6 +37,23 @@ class UserFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = get_user_model()
         django_get_or_create = ('email', )
+
+
+@pytest.fixture(scope='function')
+def login_client(db, client):
+    def login_user(user=None, **kwargs):
+        if user is None:
+            user = UserFactory()
+        user.set_password(SECRET_KEY)
+        user.save()
+        data = {
+            'username': user.email,
+            'password': SECRET_KEY
+        }
+        response = client.post(reverse_lazy('profiles:login'), data=data)
+        assert response.status_code == 302
+        return client, user
+    return login_user
 
 
 @register
