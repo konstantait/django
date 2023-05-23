@@ -1,24 +1,24 @@
 from django.contrib import admin
 
 from catalog.models import (
-    Attribute,
-    AttributeGroup,
+    # Attribute,
+    # AttributeGroup,
     Category,
     Product,
 )
 from core.mixins.admin import BaseAdmin
 
 
-@admin.register(Attribute)
-class AttributeAdmin(admin.ModelAdmin):
-    list_display = ('name', 'attribute_group', 'sort_order')
-    ordering = ('attribute_group', 'sort_order')
-
-
-@admin.register(AttributeGroup)
-class AttributeGroupAdmin(admin.ModelAdmin):
-    list_display = ('name', 'sort_order', )
-    ordering = ('name', 'sort_order', )
+# @admin.register(Attribute)
+# class AttributeAdmin(admin.ModelAdmin):
+#     list_display = ('name', 'attribute_group', 'sort_order')
+#     ordering = ('attribute_group', 'sort_order')
+#
+#
+# @admin.register(AttributeGroup)
+# class AttributeGroupAdmin(admin.ModelAdmin):
+#     list_display = ('name', 'sort_order', )
+#     ordering = ('name', 'sort_order', )
 
 
 @admin.register(Category)
