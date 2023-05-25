@@ -139,7 +139,7 @@ EMAIL_USE_TLS = config('EMAIL_USE_TLS', default=True, cast=bool)
 # EMAIL_USE_SSL = config('EMAIL_USE_SSL', default=True, cast=bool)
 
 LANGUAGE_CODE = 'en-us'
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Europe/Kiev'
 USE_I18N = True
 USE_TZ = True
 

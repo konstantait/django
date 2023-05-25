@@ -1,4 +1,4 @@
-django
+cdjango
 pillow
 python-decouple
 flake8
@@ -16,3 +16,5 @@ celery[redis]
 django-celery-results
 django-redisboard
 django-phonenumber-field[phonenumberslite]
+pytest-mock
+freezegun

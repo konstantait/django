@@ -1,15 +1,20 @@
 import faker
 import pytest
+import freezegun
+from datetime import timedelta
+from django.utils import timezone
 
 import factory.django
 from pytest_factoryboy import register
 from django.contrib.auth import get_user_model
 from django.urls import reverse_lazy
+from phonenumber_field.phonenumber import PhoneNumber
 
 from core.constants import DECIMAL_PLACES
 from core.settings import SECRET_KEY
 from catalog.models import Category, Product
 from currencies.models import Currency
+# from orders.models import Coupon, Order
 from reviews.models import Review
 
 fake = faker.Faker()
@@ -22,16 +27,18 @@ def faker_fixture():
 
 @pytest.fixture(autouse=True)
 def django_db_setup(db):
-    Currency.objects.create(code='USD', rate=1)
-    Currency.objects.create(code='EUR', rate=0.9)
-    Currency.objects.create(code='UAH', rate=37)
+    with freezegun.freeze_time(timezone.now() - timedelta(minutes=60)):
+        Currency.objects.create(code='USD', rate=1)
+        Currency.objects.create(code='EUR', rate=0.9)
+        Currency.objects.create(code='UAH', rate=37)
+    Currency.objects.exists()
     yield
 
 
 @register
 class UserFactory(factory.django.DjangoModelFactory):
     email = factory.LazyAttribute(lambda x: fake.email())
-    phone = factory.LazyAttribute(lambda x: fake.phone_number()) # noqa
+    phone = factory.LazyAttribute(lambda x: PhoneNumber.from_string(f'+38050{fake.random_number(digits=7)}')) # noqa
     is_phone_valid = True
 
     class Meta:
@@ -84,6 +91,27 @@ class ProductFactory(factory.django.DjangoModelFactory):
         if extracted:
             for category in extracted:
                 self.categories.add(category)
+
+
+# @register
+# class CouponFactory(factory.django.DjangoModelFactory):
+#     code = 'FREE'
+#     date_start = timezone.now() - timedelta(minutes=60)
+#     date_end = timezone.now() + timedelta(minutes=60)
+#
+#     class Meta:
+#         model = Coupon
+#
+#
+# @register
+# class OrderFactory(factory.django.DjangoModelFactory):
+#     email = factory.LazyAttribute(lambda x: fake.email())
+#     phone = factory.LazyAttribute(lambda x: PhoneNumber.from_string(f'+38050{fake.random_number(digits=7)}')) # noqa
+#     coupon = factory.SubFactory(CouponFactory)
+#     is_paid = True
+#
+#     class Meta:
+#         model = Order
 
 
 @register
