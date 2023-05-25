@@ -93,7 +93,7 @@ def test_update(faker, login_client):
 
 
 def test_verification(client, faker):
-    phone = PhoneNumber.from_string(f'+38050{faker.random_number(digits=7)}')  # noqa
+    phone = PhoneNumber.from_string(f'38050{faker.random_number(digits=7)}')  # noqa
     secret_key = str(faker.random_number(digits=10))
     url = reverse_lazy('profiles:verification')
     response = client.get(url)

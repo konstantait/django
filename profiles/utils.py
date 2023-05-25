@@ -2,6 +2,8 @@ import os
 import hashlib
 import binascii
 from datetime import datetime
+import random
+import string
 
 
 def hash_key(key):
@@ -29,11 +31,9 @@ def verify_key(provided_key, stored_key):
     return key_hash == stored_key
 
 
-def make_random_key(length=6, symbols='0123456789'):
-    key = []
-    for i in map(lambda x: int(len(symbols)*x/255.0), os.urandom(length)):
-        key.append(symbols[i])
-    return ''.join(key)
+def make_random_key():
+    digits = string.digits
+    return ''.join(random.choice(digits) for i in range(8))
 
 
 def send_sms(phone, key):

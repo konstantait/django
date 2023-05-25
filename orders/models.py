@@ -3,6 +3,7 @@ import decimal
 from django.contrib.auth import get_user_model
 from django.db import models
 from django.utils import timezone
+from phonenumber_field.modelfields import PhoneNumberField
 
 from core.mixins.models import (
     BaseUUID,
@@ -83,7 +84,7 @@ class Order(
     #     null=True
     # )
     email = models.EmailField()
-    phone = models.CharField(max_length=11)
+    phone = PhoneNumberField(max_length=255, blank=True, null=True)
     is_paid = models.BooleanField(default=False)
     coupon = models.ForeignKey(
         Coupon,

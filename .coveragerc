@@ -1,2 +1,2 @@
 [run]
-omit = */migrations/*.py, admin.py, apps.py, __init__.py, manage.py, wsgi.py, urls.py, backends.py, conftest.py, tests.py, */orders/*.py, utils.py, */tools/*.py
+omit = */tools/*.py
