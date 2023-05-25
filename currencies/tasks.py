@@ -8,31 +8,29 @@ from currencies.clients.monobank import mono
 from currencies.models import Currency
 
 
-def update_currency_rate(rates, bank_name):
+def update_currency_rate(rates):
     if not rates:
         return
     rates.append({'code': 'UAH', 'rate': '1.00000'})
     default_currency = Currency.objects.filter(rate=1).first()
     rate = list(filter(lambda x: x['code'] == default_currency.code, rates))[0]['rate'] # noqa
     currencies = Currency.objects.filter(date_modified__lt=timezone.now() - timedelta(minutes=2)) # noqa
-    print(timezone.now() - timedelta(minutes=1))
     for currency in currencies:
         if currency.rate != 1:
             currency.rate = float(rate) / float(list(filter(lambda x: x['code'] == currency.code, rates))[0]['rate']) # noqa
             currency.save()
-            print(bank_name, currency.code, currency.rate)
 
 
 @shared_task
 def get_currencies_privat():
     rates = privat.exchange()
-    update_currency_rate(rates, 'privat')
+    update_currency_rate(rates)
 
 
 @shared_task
 def get_currencies_mono():
     rates = mono.exchange()
-    update_currency_rate(rates, 'mono')
+    update_currency_rate(rates)
 
 # {'code': 'UAH', 'rate': '1.00000'}
 #

@@ -16,3 +16,5 @@ celery[redis]
 django-celery-results
 django-redisboard
 django-phonenumber-field[phonenumberslite]
+pytest-mock
+freezegun

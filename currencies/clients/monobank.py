@@ -34,7 +34,6 @@ class Monobank(APIBaseClient):
                         'code': 'EUR',
                         'rate': i['rateSell'],
                     })
-        print(self.base_url, results)
         return results
 
 

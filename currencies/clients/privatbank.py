@@ -32,7 +32,6 @@ class PrivatBank(APIBaseClient):
                     'code': i['ccy'],
                     'rate': i['sale'],
                 })
-        print(self.base_url, results)
         return results
 
 

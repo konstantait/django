@@ -22,7 +22,7 @@ class ProfileUpdateView(LoginRequiredMixin, UpdateView):
     def form_valid(self, form):
         if 'phone' in form.changed_data:
             phone = form.cleaned_data['phone']
-            store_key_hash_in_session(self.request, phone)
+            store_key_hash_in_session(self.request.session, phone)
             User.objects.filter(id=self.kwargs['pk']).update(is_phone_valid=False) # noqa
             self.success_url = reverse_lazy('profiles:verification')
         return super().form_valid(form)
@@ -36,7 +36,7 @@ class SignupView(CreateView):
     def form_valid(self, form):
         phone = form.cleaned_data['phone']
         if phone:
-            store_key_hash_in_session(self.request, phone)
+            store_key_hash_in_session(self.request.session, phone)
         # If the phone number field is empty, log in by email
         else:
             self.success_url = reverse_lazy('profiles:login')
@@ -49,11 +49,11 @@ class PhoneVerificationView(FormView):
     success_url = reverse_lazy('profiles:logout')
 
     def form_valid(self, form):
-        phone = verify_key_hash_from_session(self.request, form.cleaned_data['secret_key']) # noqa
+        phone = verify_key_hash_from_session(self.request.session, form.cleaned_data['secret_key']) # noqa
         if phone:
             User.objects.filter(phone=phone).update(is_phone_valid=True)
         else:
             messages.error(self.request, 'Invalid code or timed out. Code has been sent again!') # noqa
-            store_key_hash_in_session(self.request)
+            store_key_hash_in_session(self.request.session)
             self.success_url = reverse_lazy('profiles:verification')
         return super().form_valid(form)

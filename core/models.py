@@ -10,8 +10,8 @@ class SingletonModel(models.Model):
         self.pk = 1
         super(SingletonModel, self).save(*args, **kwargs)
 
-    def delete(self, *args, **kwargs):
-        pass
+    # def delete(self, *args, **kwargs):
+    #     pass
 
     @classmethod
     def load(cls):
