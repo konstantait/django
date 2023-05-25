@@ -3,7 +3,7 @@ from django.urls import reverse_lazy
 from catalog.models import Product
 
 
-def test_orders(login_client, product_factory, category_factory):
+def test_orders(login_client, product_factory, category_factory, coupon_factory): # noqa
 
     client, user = login_client()
     url = reverse_lazy('orders:order_create')
@@ -21,13 +21,13 @@ def test_orders(login_client, product_factory, category_factory):
     assert response.redirect_chain[0][1] == 302
     assert len(session['cart']) == Product.objects.count()
 
-    # coupon = coupon_factory()
-    # url = reverse_lazy('orders:order_create')
-    # data = {
-    #     'name': user.first_name,
-    #     'email': user.email,
-    #     'phone': user.phone,
-    #     'coupon': coupon.code
-    # }
-    # response = client.post(url, data=data, follow=True)
-    # assert response.status_code == 200
+    coupon = coupon_factory()
+    url = reverse_lazy('orders:order_create')
+    data = {
+        'name': user.first_name,
+        'email': user.email,
+        'phone': user.phone,
+        'coupon': coupon.code
+    }
+    response = client.post(url, data=data)
+    assert response.status_code == 302
