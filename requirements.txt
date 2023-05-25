@@ -1,4 +1,4 @@
-cdjango
+django
 pillow
 python-decouple
 flake8
