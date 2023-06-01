@@ -11,7 +11,7 @@ from core.constants import MAX_DIGITS, DECIMAL_PLACES
 
 def upload_to(instance, filename):
     _name, extension = path.splitext(filename)
-    return f"/images/{str(instance.pk)}.{extension}"
+    return f'products/images/{str(instance.pk)}{extension}'
 
 
 class BaseUUID(models.Model):

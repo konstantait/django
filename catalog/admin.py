@@ -23,7 +23,7 @@ from core.mixins.admin import BaseAdmin
 
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
-    list_display = ('name', 'slug', 'sort_order', )
+    list_display = ('name', 'slug', 'parent', 'sort_order', )
     ordering = ('sort_order', 'slug')
     prepopulated_fields = {'slug': ('name',)}
 
