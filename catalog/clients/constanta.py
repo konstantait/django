@@ -8,18 +8,18 @@ class DevConstantaUA(APIBaseClient):
     base_url = 'https://dev.constanta.ua/ru'
 
     __categories = {}
-    # noqa https://dev.constanta.ua/ru/80-divany -> https://dev.constanta.ua/ru/80-divany?id_category=80&n=122 # noqa
-    # noqa https://dev.constanta.ua/ru/56-kresla-i-pufy -> https://dev.constanta.ua/ru/56-kresla-i-pufy?id_category=56&n=26
-    # noqa {
-    # noqa '80-divany': {'children': ['80-pryamye-divany', '80-uglovye-divany', '80-divany-akkordeon'],
-    # noqa                    'count': '122', 'url': 'https://dev.constanta.ua/ru/80-divany'},
-    # noqa '56-kresla-i-pufy': {'children': [], 'count': '26', 'url': 'https://dev.constanta.ua/ru/56-kresla-i-pufy'},
-    # noqa '55-krovati': {'children': [], 'count': '15', 'url': 'https://dev.constanta.ua/ru/55-krovati'},
-    # noqa '54-korpusnaya-mebel': {'children': ['54-kukhonnye-garnitury', '54-shkafy-kupe-ergosens', '54-shkafy-kupe', '54-stoly', '54-spalnya-zlata'],
-    # noqa                    'count': '54', 'url': 'https://dev.constanta.ua/ru/54-korpusnaya-mebel'},
-    # noqa '82-kukhonnaya-mebel': {'children': ['82-kukhonnye-garnitury', '82-kukhonnye-stulya', '82-uglovye-divany'],
-    # noqa                    'count': '18', 'url': 'https://dev.constanta.ua/ru/82-kukhonnaya-mebel'},
-    # noqa '58-aksessuary': {'children': ['58-stoly'], 'count': '22', 'url': 'https://dev.constanta.ua/ru/58-aksessuary'},
+    # https://dev.constanta.ua/ru/80-divany -> https://dev.constanta.ua/ru/80-divany?id_category=80&n=122 # noqa
+    # https://dev.constanta.ua/ru/56-kresla-i-pufy -> https://dev.constanta.ua/ru/56-kresla-i-pufy?id_category=56&n=26
+    # {
+    # '80-divany': {'children': ['80-pryamye-divany', '80-uglovye-divany', '80-divany-akkordeon'],
+    #                     'count': '122', 'url': 'https://dev.constanta.ua/ru/80-divany'},
+    # '56-kresla-i-pufy': {'children': [], 'count': '26', 'url': 'https://dev.constanta.ua/ru/56-kresla-i-pufy'},
+    # '55-krovati': {'children': [], 'count': '15', 'url': 'https://dev.constanta.ua/ru/55-krovati'},
+    # '54-korpusnaya-mebel': {'children': ['54-kukhonnye-garnitury', '54-shkafy-kupe-ergosens', '54-shkafy-kupe', '54-stoly', '54-spalnya-zlata'],
+    #                     'count': '54', 'url': 'https://dev.constanta.ua/ru/54-korpusnaya-mebel'},
+    # '82-kukhonnaya-mebel': {'children': ['82-kukhonnye-garnitury', '82-kukhonnye-stulya', '82-uglovye-divany'],
+    #                     'count': '18', 'url': 'https://dev.constanta.ua/ru/82-kukhonnaya-mebel'},
+    # '58-aksessuary': {'children': ['58-stoly'], 'count': '22', 'url': 'https://dev.constanta.ua/ru/58-aksessuary'},
     # '57-akcii': {'children': ['57-shkafy-kupe-ergosens'], 'count': '15', 'url': 'https://dev.constanta.ua/ru/57-akcii'}}
 
     __products = {}
