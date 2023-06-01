@@ -25,6 +25,7 @@
           </li>
           <li class="nav-item"><a class="nav-link" href="{% url 'catalog:home' %}">Shops</a></li>
           <li class="nav-item"><a class="nav-link" href="{% url 'catalog:home' %}">Contacts</a>
+          {% if user.is_authenticated %}<li class="nav-item"><a class="nav-link" href="{% url 'catalog:parsing' %}">Parsing</a>{% endif %}
           </li>
         </ul>
         {% include "includes/nav-buttons.html" %}

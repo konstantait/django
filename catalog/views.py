@@ -1,11 +1,26 @@
-# from django.db.models import Prefetch
-from django.views.generic import ListView, DetailView
-
+from django.views.generic import TemplateView, ListView, DetailView
 from django.contrib.auth.decorators import login_required, user_passes_test  # noqa
+
 from catalog.models import Product
 from currencies.models import Currency
 from reviews.models import Review
 from cart.forms import CartAddProductForm
+from catalog.tasks import parse_products
+
+
+class CatalogHome(TemplateView):
+    template_name = 'catalog/index.html'
+
+    def get_context_data(self, **kwargs):
+        return super().get_context_data(**kwargs)
+
+
+class CatalogParsing(TemplateView):
+    template_name = 'catalog/index.html'
+
+    def get_context_data(self, **kwargs):
+        parse_products()
+        return super().get_context_data(**kwargs)
 
 
 class ProductListView(ListView):
@@ -14,11 +29,9 @@ class ProductListView(ListView):
     context_object_name = 'products'
 
     def get_queryset(self):
-        # categories = Category.objects.filter(slug=self.kwargs['category_slug']) # noqa
-        # products = Product.objects.prefetch_related(Prefetch('categories', queryset=categories)) # noqa
-        # return products
         products = Product.objects.filter(categories__slug=self.kwargs['category_slug']) # noqa
         converting = Currency.objects.get(code='UAH')
+        # Adding a calculated field price_currency
         for product in products:
             left = converting.symbol_left
             right = converting.symbol_right
@@ -26,12 +39,6 @@ class ProductListView(ListView):
             value = product.price * converting.rate
             product.price_currency = f'{left}{value:0.{precision}f}{right}'
         return products
-        # return Product.objects.filter(categories__slug=self.kwargs['category_slug']) # noqa
-
-    # def get_context_data(self, **kwargs):
-    #     context = super().get_context_data(**kwargs)
-    #     context['category'] = self.kwargs['category_slug']
-    #     return context
 
 
 class ProductDetailView(DetailView):

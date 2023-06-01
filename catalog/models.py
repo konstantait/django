@@ -1,4 +1,8 @@
+# import os
+
 from django.db import models
+# from django.conf import settings
+from django_lifecycle import LifecycleModelMixin, hook, BEFORE_UPDATE # noqa
 
 from core.mixins.models import (
     BaseUUID,
@@ -11,10 +15,6 @@ from core.mixins.models import (
     BaseSortOrder,
     BaseDateAddedModified
 )
-
-# from core.constants import (
-#     CSV_IN_FIELD_ATTR_DELIMITER
-# )
 
 from core.settings import AUTH_USER_MODEL
 
@@ -53,6 +53,8 @@ class Category(
     BaseSortOrder,
     BaseDateAddedModified
 ):
+    parent = models.ForeignKey('self', on_delete=models.CASCADE, blank=True, null=True)
+
     class Meta:
         default_related_name = 'categories'
 
@@ -61,6 +63,7 @@ class Category(
 
 
 class Product(
+    LifecycleModelMixin,
     BaseUUID,
     BaseName,
     BaseSlug,
@@ -84,6 +87,24 @@ class Product(
     def __str__(self):
         return self.name
 
+    # @hook(BEFORE_UPDATE, when='image')
+    # def after_update_signal(self):
+    #     if self.initial_value('image'):
+    #         if str(self.initial_value('image')) != 'placeholder.jpg':
+    #             image_path = os.path.join(
+    #                 settings.BASE_DIR,
+    #                 settings.MEDIA_ROOT,
+    #                 str(self.initial_value('image'))
+    #             )
+    #         try:
+    #             os.remove(image_path)
+    #         except (FileNotFoundError, OSError, IOError):
+    #             ...
+
+    def delete(self, *args, **kwargs):
+        self.image.delete()
+        super().delete(*args, **kwargs)
+
     def get_categories(self):
         return [
             category['name'] for category in (
@@ -93,15 +114,3 @@ class Product(
                 .values('name')
             )
         ]
-
-    # def get_attributes(self):
-    #     return [
-    #         attribute['attribute_group__name'] +
-    #         CSV_IN_FIELD_ATTR_DELIMITER +
-    #         attribute['name'] for attribute in (
-    #             self.attributes
-    #             .select_related('attribute_group')
-    #             .order_by('attribute_group__sort_order')
-    #             .values('attribute_group__name', 'name')
-    #         )
-    #     ]

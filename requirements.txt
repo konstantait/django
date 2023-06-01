@@ -18,3 +18,4 @@ django-redisboard
 django-phonenumber-field[phonenumberslite]
 pytest-mock
 freezegun
+beautifulsoup4
