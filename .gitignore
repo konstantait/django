@@ -133,7 +133,7 @@ dmypy.json
 .idea/
 
 # Redis
-*.rdb
+dump.rdb
 
 # Media
 media/products/
