@@ -7,7 +7,6 @@ logger = logging.getLogger(__name__)
 
 
 class APIBaseClient:
-
     base_url = ''
 
     def __init__(self):
@@ -21,15 +20,8 @@ class APIBaseClient:
                 **kwargs
             )
         except (RequestException, HTTPError) as err:
+            self.response = None
             logger.error(err)
 
-    def exchange(self):
-        """
-            :return: dict
-            [
-                {'code': 'USD', 'rate': '37.4406'},
-                {'code': 'EUR', 'rate': '41.8008'},
-
-            ]
-        """
+    def parse(self):
         raise NotImplementedError

@@ -1,5 +1,5 @@
 from django import forms
-from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
+from django.contrib.auth.forms import AuthenticationForm
 from django.utils.translation import gettext_lazy as _
 from phonenumber_field.formfields import PhoneNumberField
 
@@ -26,24 +26,6 @@ class SigninForm(AuthenticationForm):
         super().__init__(self, *args, **kwargs)
         self.fields['username'].label = _('E-mail or phone')
     pass
-
-
-class SignupForm(UserCreationForm):
-    class Meta:
-        model = User
-        fields = ('email', 'phone', 'password1', 'password2')
-
-    def clean_email(self):
-        email = self.cleaned_data.get('email')
-        if User.objects.filter(email__iexact=email).exists():
-            raise forms.ValidationError('User with that email already exists')
-        return email
-
-    def clean_phone(self):
-        phone = self.cleaned_data.get('phone')
-        if User.objects.filter(phone=phone, is_phone_valid=True).exists():
-            raise forms.ValidationError('User with that phone already exists')
-        return phone
 
 
 class PhoneVerificationForm(forms.Form):

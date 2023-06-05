@@ -1,4 +1,5 @@
 django
+django-stubs
 pillow
 python-decouple
 flake8
