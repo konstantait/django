@@ -1,0 +1,11 @@
+{% extends 'layouts/base.html' %}
+{% block content %}
+<div class="col-12 col-lg-4 offset-lg-4 my-3 my-lg-5">
+    <h2>Sign up</h2>
+    <p>Already have account? <a href="{% url 'profiles:login' %}">Login</a></p>
+    <form method="post">
+        {% include 'includes/form.html' with form=form %}
+        <input class="btn btn-primary w-100" type="submit" value="Change my password">
+    </form>
+</div>
+{% endblock content %}

@@ -24,9 +24,19 @@
             </ul>
           </li>
           <li class="nav-item"><a class="nav-link" href="{% url 'catalog:home' %}">Shops</a></li>
-          <li class="nav-item"><a class="nav-link" href="{% url 'catalog:home' %}">Contacts</a>
-          {% if user.is_authenticated %}<li class="nav-item"><a class="nav-link" href="{% url 'catalog:parsing' %}">Parsing</a>{% endif %}
+          <li class="nav-item"><a class="nav-link" href="{% url 'catalog:home' %}">Contacts</a></li>
+          {% if user.is_authenticated %}
+          <li class="nav-item"><a class="nav-link" href="{% url 'catalog:parsing' %}">Parsing</a></li>
+          {% endif %}
+           <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="" role="button" data-bs-toggle="dropdown" aria-expanded="false">{{ currency.code }}</a>
+            <ul class="dropdown-menu">
+              {% for item in currency.all %}
+              {% if item.code != currency.code %}<li><a class="dropdown-item" href="{% url 'currencies:update' item.code %}">{{ item.code }}</a></li>{% endif %}
+              {% endfor %}
+            </ul>
           </li>
+
         </ul>
         {% include "includes/nav-buttons.html" %}
       </div>

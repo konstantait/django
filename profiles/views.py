@@ -1,11 +1,9 @@
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.views.generic import CreateView
-from django.views.generic.edit import FormView, UpdateView
+from django.views.generic import FormView, UpdateView
 from django.urls import reverse_lazy
 
-
-from profiles.forms import SignupForm, PhoneVerificationForm, ProfileForm
+from profiles.forms import PhoneVerificationForm, ProfileForm
 from profiles.utils import store_key_hash_in_session, verify_key_hash_from_session # noqa
 from profiles.models import User
 
@@ -25,21 +23,6 @@ class ProfileUpdateView(LoginRequiredMixin, UpdateView):
             store_key_hash_in_session(self.request.session, phone)
             User.objects.filter(id=self.kwargs['pk']).update(is_phone_valid=False) # noqa
             self.success_url = reverse_lazy('profiles:verification')
-        return super().form_valid(form)
-
-
-class SignupView(CreateView):
-    template_name = 'profiles/signup.html'
-    form_class = SignupForm
-    success_url = reverse_lazy('profiles:verification')
-
-    def form_valid(self, form):
-        phone = form.cleaned_data['phone']
-        if phone:
-            store_key_hash_in_session(self.request.session, phone)
-        # If the phone number field is empty, log in by email
-        else:
-            self.success_url = reverse_lazy('profiles:login')
         return super().form_valid(form)
 
 

@@ -28,14 +28,15 @@ CELERY_BEAT_SCHEDULE = {
     },
 }
 
+LOGIN_URL = 'profiles:login'
 LOGIN_REDIRECT_URL = 'catalog:home'
 LOGOUT_REDIRECT_URL = 'profiles:login'
+
 AUTH_USER_MODEL = 'profiles.User'
-AUTHENTICATION_BACKENDS = [
-    "profiles.backends.EmailBackend", "profiles.backends.PhoneBackend"
-]
+AUTHENTICATION_BACKENDS = ["profiles.backends.EmailBackend", "profiles.backends.PhoneBackend"]
 
 CART_SESSION_ID = 'cart'
+CURRENCY_SESSION_ID = 'currency'
 
 PHONENUMBER_DB_FORMAT = 'INTERNATIONAL'
 PHONENUMBER_DEFAULT_REGION = 'UA'
@@ -64,6 +65,10 @@ INSTALLED_APPS = [
     'favorites',
     'orders',
     'profiles',
+    'profiles.signup',
+    'profiles.password',
+    'profiles.password.change',
+    'profiles.password.reset',
     'reviews',
 ]
 
@@ -93,7 +98,9 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'currencies.context_processors.currencies',
                 'cart.context_processors.cart',
+
             ],
         },
     },
@@ -109,18 +116,10 @@ DATABASES = {
 }
 
 AUTH_PASSWORD_VALIDATORS = [
-    {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator', # noqa
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator', # noqa
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator', # noqa
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator', # noqa
-    },
+    {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator', }, # noqa
+    {'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator', }, # noqa
+    {'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator', }, # noqa
+    {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator', },# noqa
 ]
 
 CACHES = {
@@ -137,6 +136,7 @@ EMAIL_HOST_USER = config('EMAIL_HOST_USER', default='EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD', default='EMAIL_HOST_PASSWORD') # noqa
 EMAIL_USE_TLS = config('EMAIL_USE_TLS', default=True, cast=bool)
 # EMAIL_USE_SSL = config('EMAIL_USE_SSL', default=True, cast=bool)
+EMAIL_SIGNUP_TEMPLATE = 'profiles/signup/email.html'
 
 LANGUAGE_CODE = 'en-us'
 TIME_ZONE = 'Europe/Kiev'
@@ -149,6 +149,11 @@ MEDIA_URL = 'media/'
 MEDIA_ROOT = 'media'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+try:
+    from core.settings_local import *  # noqa
+except ImportError:
+    ...
 
 # if DEBUG:
 #     MIDDLEWARE += [

@@ -21,3 +21,4 @@ class RatingTypes(IntegerChoices):
 
 class CacheKeys(TextChoices):
     REVIEWS_ALL = 'reviews:all', 'Reviews all'
+    CURRENCIES_ALL = 'currencies:all', 'Currencies all'
