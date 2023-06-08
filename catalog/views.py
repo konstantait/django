@@ -1,12 +1,13 @@
 from django.views.generic import TemplateView, ListView, DetailView
 from django.contrib.auth.decorators import login_required, user_passes_test  # noqa
+from django_filters.views import FilterView
 
 from catalog.models import Product
 from reviews.models import Review
 from cart.forms import CartAddProductForm
 from catalog.tasks import parse_products
 
-from currencies.services import get_currency, get_user_currency
+from catalog.filters import ProductFilter
 
 
 class CatalogHome(TemplateView):
@@ -21,20 +22,21 @@ class CatalogParsing(TemplateView):
         return super().get_context_data(**kwargs)
 
 
-class ProductListView(ListView):
+class ProductListView(FilterView):
     model = Product
     template_name = 'catalog/list.html'
     context_object_name = 'products'
+    paginate_by = 8
+    filterset_class = ProductFilter
+    ordering = ['name']
 
     def get_queryset(self):
         products = Product.objects.filter(categories__slug=self.kwargs['category_slug']) # noqa
-        currency = get_currency(code=get_user_currency(self.request.session))
-        for product in products:
-            left = currency.symbol_left
-            right = currency.symbol_right
-            precision = currency.decimal_place
-            value = product.price * currency.rate
-            product.price_currency = f'{left}{value:0.{precision}f}{right}'
+        ordering = self.get_ordering()
+        if ordering:
+            if isinstance(ordering, str):
+                ordering = (ordering,)
+            products = products.order_by(*ordering)
         return products
 
 

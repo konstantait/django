@@ -47,9 +47,6 @@ def update_user_currency(session: SessionBase, code: str) -> None:
     session[CURRENCY_SESSION_ID] = code
 
 
-# {'code': 'UAH', 'rate': '1.00000'}
-# {'code': 'EUR', 'rate': '41.50000'}
-# {'code': 'USD', 'rate': '37.60000'}
 def update_outdated_currencies_rates(rates: list[dict], minutes=2) -> None:
     if rates:
         default = get_default_currency()
@@ -61,6 +58,10 @@ def update_outdated_currencies_rates(rates: list[dict], minutes=2) -> None:
                     rate = list(filter(lambda x: x['code'] == currency.code, rates))[0]['rate'] # noqa
                     currency.rate = float(default_rate) / float(rate) # noqa
                     currency.save()
+
+# {'code': 'UAH', 'rate': '1.00000'}
+# {'code': 'EUR', 'rate': '41.50000'}
+# {'code': 'USD', 'rate': '37.60000'}
 
 # if default_currency_code = 'UAH'
 # rate = rate_UAH

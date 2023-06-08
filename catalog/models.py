@@ -77,7 +77,8 @@ class Product(
     model = models.CharField(max_length=64, default='', blank=True)
     sku = models.CharField(max_length=64, unique=True)
     bookmarked_by = models.ManyToManyField(AUTH_USER_MODEL, blank=True, related_name='favorites') # noqa
-    bookmarks_count = models.PositiveIntegerField(default=0)
+    feedbacks = models.PositiveIntegerField(default=0)
+    rating = models.PositiveIntegerField(default=0)
     categories = models.ManyToManyField(Category, blank=True)
     # attributes = models.ManyToManyField(Attribute, blank=True)
 
