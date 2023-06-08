@@ -1,5 +1,6 @@
 django
 django-stubs
+django-filter
 pillow
 python-decouple
 flake8

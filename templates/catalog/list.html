@@ -1,7 +1,7 @@
 {% extends 'layouts/base.html' %}
-{% load static %}
 {% block content %}
-<div class="row row-cols-1 row-cols-md-3 g-4">
+{% include 'includes/filter.html' %}
+<div class="row row-cols-1 row-cols-md-4 g-2">
   {% for product in products %}
   <div class="col">
     <div class="card h-64">
@@ -10,13 +10,15 @@
         <h5 class="card-title">{{ product.name }}</h5>
         <p class="card-text">{{ product.name }} {{ product.model }} ({{ product.sku }})</p>
         <hr>
-        <button class="btn btn-outline-secondary add-btn">Add to Cart</button>
-        <a class="btn btn-outline-success" href="{{ request.path }}{{ product.slug }}">View</a>
-
-        <h4 style="display: inline-block; float: right"><strong> {{product.price_currency}} </strong></h4>
+        <button class="btn btn-outline-secondary add-btn btn-sm">Add to Cart</button>
+        <a class="btn btn-outline-success btn-sm" href="{{ request.path }}{{ product.slug }}">View</a>
+        <h5 style="display: inline-block; float: right"><strong> {{product.price_currency}} </strong></h5>
       </div>
     </div>
   </div>
   {% endfor %}
 </div>
+{% if products %}
+  {% include 'includes/paginator.html' %}
+{% endif %}
 {% endblock content %}

@@ -55,6 +55,7 @@ INSTALLED_APPS = [
     'redisboard',
     'django_celery_results',
     'django_celery_beat',
+    'django_filters',
     'phonenumber_field',
     'widget_tweaks',
     'catalog',

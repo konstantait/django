@@ -1,0 +1,33 @@
+{% load param_replace %}
+{% if page_obj %}
+<div class="d-flex align-items-center flex-column">
+    <div class="pagination my-3">
+        {% if page_obj.has_previous %}
+        <span class="page-item">
+            <a class="page-link" href="?{% param_replace page=1 %}">First</a>
+        </span>
+        {% if page_obj.has_previous != 1 %}
+        <span class="page-item">
+            <a class="page-link" href="?{% param_replace page=page_obj.previous_page_number %}">First</a>
+        </span>
+        {% endif %}
+        {% endif %}
+
+        <span class="page-link active">Page {{ page_obj.number }} of {{ paginator.num_pages }}</span>
+
+        {% if page_obj.has_next %}
+        {% if page_obj.next_page_number != paginator.num_pages %}
+        <span class="page-item">
+            <a class="page-link" href="?{% param_replace page=page_obj.next_page_number %}">Next</a>
+        </span>
+        {% endif %}
+        <span class="page-item">
+            <a class="page-link" href="?{% param_replace page=paginator.num_pages %}">Last</a>
+        </span>
+        {% endif %}
+
+       <span class="page-link active">Items {{ page_obj.start_index }}-{{ page_obj.end_index }}</span>
+
+    </div>
+</div>
+{% endif %}

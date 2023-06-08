@@ -19,6 +19,16 @@ class RatingTypes(IntegerChoices):
     EXCELLENT = 4, 'Excellent'
 
 
+class OrderByChoices(TextChoices):
+    POPULAR = 'popular', 'Popular'
+    LOWCOST = 'low-cost', 'Low cost'
+    HIGHCOST = 'high-cost', 'High cost'
+    RATING = 'rating', 'Rating'
+    REVIEWS = 'reviews', 'Reviews'
+    NAME = 'name', 'Name'
+    DATE = 'date', 'Date'
+
+
 class CacheKeys(TextChoices):
     REVIEWS_ALL = 'reviews:all', 'Reviews all'
     CURRENCIES_ALL = 'currencies:all', 'Currencies all'
