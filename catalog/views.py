@@ -1,4 +1,4 @@
-from django.views.generic import TemplateView, ListView, DetailView
+from django.views.generic import TemplateView, DetailView
 from django.contrib.auth.decorators import login_required, user_passes_test  # noqa
 from django_filters.views import FilterView
 
