@@ -2,7 +2,7 @@ django
 djangorestframework
 django-stubs
 django-filter
-
+drf-yasg
 pillow
 python-decouple
 flake8
