@@ -56,6 +56,3 @@ class ProductDeleteSerializer(serializers.ModelSerializer):
                                   "'Product' because they are referenced "
                                   "through protected foreign keys", )
         return attrs
-
-
-

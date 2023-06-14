@@ -4,7 +4,7 @@ from django.conf.urls.static import static
 from django.conf import settings
 from drf_yasg import openapi
 from drf_yasg.views import get_schema_view
-from rest_framework.permissions import AllowAny, IsAuthenticated
+from rest_framework.permissions import IsAuthenticated
 
 from rest.catalog.urls import urlpatterns as rest_catalog_urlpatterns
 
