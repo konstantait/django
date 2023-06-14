@@ -57,6 +57,7 @@ INSTALLED_APPS = [
     'django_celery_results',
     'django_celery_beat',
     'django_filters',
+    'drf_yasg',
     'phonenumber_field',
     'widget_tweaks',
     'catalog',
