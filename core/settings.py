@@ -36,7 +36,7 @@ AUTH_USER_MODEL = 'profiles.User'
 AUTHENTICATION_BACKENDS = ["profiles.backends.EmailBackend", "profiles.backends.PhoneBackend"]
 
 CART_SESSION_ID = 'cart'
-CURRENCY_SESSION_ID = 'currency'
+DEFAULT_CURRENCY = 'UAH'
 
 PHONENUMBER_DB_FORMAT = 'INTERNATIONAL'
 PHONENUMBER_DEFAULT_REGION = 'UA'
@@ -101,7 +101,6 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-                'currencies.context_processors.currencies',
                 'cart.context_processors.cart',
 
             ],

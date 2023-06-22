@@ -8,7 +8,6 @@ from django_lifecycle import (
     AFTER_CREATE
 )
 
-from core.constants import MAX_DIGITS, DECIMAL_PLACES_CURRENCY
 from core.mixins.models import (
     BaseUUID,
     BaseStatus,
@@ -16,6 +15,7 @@ from core.mixins.models import (
 )
 
 from core.enums import CacheKeys
+from core.settings import DEFAULT_CURRENCY
 
 
 class Currency(
@@ -24,17 +24,19 @@ class Currency(
     BaseStatus,
     BaseDateAddedModified
 ):
-    title = models.CharField(max_length=32, default='', blank=True) # noqa
     code = models.CharField(max_length=3, unique=True)
-    symbol_left = models.CharField(max_length=12, default='', blank=True)
-    symbol_right = models.CharField(max_length=12, default='', blank=True)
-    decimal_place = models.PositiveIntegerField(default=2)
+    symbol = models.CharField(max_length=12, default='', blank=True)
     rate = models.DecimalField(
         validators=[MinValueValidator(0)],
-        max_digits=MAX_DIGITS,
-        decimal_places=DECIMAL_PLACES_CURRENCY,
+        max_digits=32,
+        decimal_places=4,
         default=1
     )
+
+    @classmethod
+    def get_default_id(cls):
+        currency, _ = cls.objects.get_or_create(code=DEFAULT_CURRENCY)
+        return currency.id
 
     def __str__(self):
         return self.code

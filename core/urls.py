@@ -16,7 +16,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('cart/', include('cart.urls', namespace='cart')),
     path('contacts/', include('contacts.urls', namespace='contacts')),
-    path('currencies/', include('currencies.urls', namespace='currencies')),
     path('favorites/', include('favorites.urls', namespace='favorites')),
     path('orders/', include('orders.urls', namespace='orders')),
     path('profiles/', include('profiles.urls', namespace='profiles')),

@@ -1,9 +1,7 @@
-# from django.contrib.auth import get_user_model
-# from django.urls import reverse_lazy
-
-# from catalog.models import Product
-from currencies.tasks import get_currencies_privat, get_currencies_mono, update_currency_rate # noqa
-# from currencies.api_client import APIBaseClient
+from currencies.tasks import (
+    get_currencies_privat,
+    get_currencies_mono
+)
 
 
 def test_currency(mocker):
@@ -17,4 +15,3 @@ def test_currency(mocker):
     ]
     get_currencies_mono()
     assert monobank.call_count == 1
-    assert update_currency_rate(None) is None
