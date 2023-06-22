@@ -1,3 +1,4 @@
+from django.db.models import OuterRef, Exists
 from django.views.generic import TemplateView, DetailView
 from django.contrib.auth.decorators import login_required, user_passes_test  # noqa
 from django_filters.views import FilterView
@@ -32,11 +33,15 @@ class ProductListView(FilterView):
 
     def get_queryset(self):
         products = Product.objects.filter(categories__slug=self.kwargs['category_slug']) # noqa
+        products = products.select_related('currency').all()
         ordering = self.get_ordering()
         if ordering:
             if isinstance(ordering, str):
                 ordering = (ordering,)
             products = products.order_by(*ordering)
+        # favorite = Favorite.objects.filter(product=OuterRef('pk'), user=self.request.user) # noqa
+        favorite = self.request.user.favorites.filter(id=OuterRef('pk'))
+        products = products.annotate(favorite=Exists(favorite))
         return products
 
 

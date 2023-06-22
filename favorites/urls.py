@@ -1,13 +1,12 @@
 from django.urls import path
 
-from favorites.views import List, Add, Remove, Clear
+from favorites.views import List, Toggle, Clear, AJAXToggle
 
 app_name = 'favorites'
 
 urlpatterns = [
     path('', List.as_view(), name='list'),
-    path('add/<uuid:product_id>/', Add.as_view(), name='add'),
-    path('remove/<uuid:product_id>/', Remove.as_view(), name='remove'),
+    path('<uuid:pk>/', Toggle.as_view(), name='toggle'),
+    path('ajax/<uuid:pk>/', AJAXToggle.as_view(), name='ajax-toggle'),
     path('clear/', Clear.as_view(), name='clear'),
-
 ]

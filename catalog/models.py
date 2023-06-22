@@ -17,7 +17,7 @@ from core.mixins.models import (
 )
 
 from core.settings import AUTH_USER_MODEL
-
+from currencies.models import Currency
 
 # class AttributeGroup(
 #     BaseUUID,
@@ -74,12 +74,12 @@ class Product(
     BaseSortOrder,
     BaseDateAddedModified
 ):
-    model = models.CharField(max_length=64, default='', blank=True)
     sku = models.CharField(max_length=64, unique=True)
-    bookmarked_by = models.ManyToManyField(AUTH_USER_MODEL, blank=True, related_name='favorites') # noqa
+    favorites = models.ManyToManyField(AUTH_USER_MODEL, blank=True, related_name='favorites') # noqa
     feedbacks = models.PositiveIntegerField(default=0)
     rating = models.PositiveIntegerField(default=0)
     categories = models.ManyToManyField(Category, blank=True)
+    currency = models.ForeignKey(Currency, on_delete=models.PROTECT,  default=Currency.get_default_id) # noqa
     # attributes = models.ManyToManyField(Attribute, blank=True)
 
     class Meta:

@@ -10,9 +10,12 @@
         <h5 class="card-title">{{ product.name }}</h5>
         <p class="card-text">{{ product.name }} {{ product.model }} ({{ product.sku }})</p>
         <p>
-           <a href="javascript:void(0)" class="favourite-link" data-product_id="{% url 'favorites:ajax-toggle' product.id %}">
-             <i class="bi {% if product.favorite %}bi-heart-fill{% else %}bi-heart{% endif %}"></i>
-           </a>
+          <a href="javascript:void(0)" class="favourite-link" data-product_id="{{ product.id }}">
+            <i class="bi {% if product.is_favourite %}bi-heart-fill{% else %}bi-heart{% endif %}"></i>
+          </a>
+          <a href="{% url 'favorites:toggle' product.id %}">
+            {% if product.favorite %}<i class="bi-heart-fill"></i>{% else %}<i class="bi-heart"></i>{% endif %}
+          </a>
         </p>
         <hr>
         <button class="btn btn-outline-secondary add-btn btn-sm">Add to Cart</button>
@@ -31,7 +34,7 @@
 <script>
   $(document).ready(function () {
     $('.favourite-link').click(function () {
-      toggle_favourite($(this))
+      add_or_remove_favourite($(this), "{{ csrf_token }}")
     })
   })
 </script>

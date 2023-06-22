@@ -5,18 +5,21 @@
 <h4>Favorites</h4>
 <table class="table align-middle">
   <tbody>
-  {% for product in products %}
+  {% for favorite in favorites %}
   <tr>
     <th scope="row">
-      <a href="{{ product.get_absolute_url }}">
-        <img src="{{ product.image.url }}" width="128">
+      <a href="{{ favorite.product.get_absolute_url }}">
+        <img src="{{ favorite.product.image.url }}" width="128">
       </a>
     </th>
-    <td>{{ product.name }}</td>
+    <td>{{ favorite.product.name }}</td>
     <td>
-      <a href="{% url 'favorites:toggle' product.id %}"><i class="bi bi-trash"></i></a>
+      <form action="{% url 'favorites:remove' favorite.product.id %}" method="post">
+        <input class="btn btn-light" type="submit" value="Remove">
+        {% csrf_token %}
+      </form>
     </td>
-    <td class="num">${{ product.price }}</td>
+    <td class="num">${{ favorite.product.price }}</td>
   </tr>
   {% endfor %}
   </tbody>
