@@ -16,7 +16,9 @@ pytest-cov
 pytest-factoryboy
 django-widget-tweaks
 django-lifecycle
+celery
 celery[redis]
+django_celery_beat
 django-celery-results
 django-redisboard
 django-phonenumber-field[phonenumberslite]
