@@ -1,0 +1,6 @@
+venv/
+*.pyc
+.github/
+.git/
+.pytest_cache/
+htmlcov/
