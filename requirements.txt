@@ -24,3 +24,5 @@ django-phonenumber-field[phonenumberslite]
 pytest-mock
 freezegun
 beautifulsoup4
+psycopg==3.1.9
+daphne==4.0.0

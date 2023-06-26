@@ -1,6 +1,7 @@
 venv/
-*.pyc
 .github/
 .git/
+__pycache__/
+.idea/
 .pytest_cache/
 htmlcov/

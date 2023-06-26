@@ -7,10 +7,13 @@ WORKDIR /app
 
 COPY ./requirements.txt .
 
+RUN apt-get update
+RUN apt-get -y install netcat-traditional
+RUN apt-get clean
+
 RUN pip install --upgrade pip
 RUN pip install -r requirements.txt
 
 ENV PYTHONBREAKPOINT=ipdb.set_trace
 COPY ./entrypoint.sh .
-
 ENTRYPOINT ["./entrypoint.sh"]
