@@ -8,14 +8,13 @@ from celery.schedules import crontab
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-CURRENCY_NATIONAL_CODE = config('CURRENCY_NATIONAL_CODE', default='UAH')
-
 DEBUG = config('DEBUG', default=True, cast=bool)
 SECRET_KEY = config('SECRET_KEY', default=get_random_secret_key())
 ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='127.0.0.1', cast=Csv())
+INTERNAL_IPS = config('INTERNAL_IPS', default='127.0.0.1', cast=Csv())
+CSRF_TRUSTED_ORIGINS = ['http://ecom.com']
 
-CELERY_BROKER_URL = config('CELERY_BROKER_URL', default='CELERY_BROKER_URL')
-# CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'
+CELERY_BROKER_URL = config('CELERY_BROKER_URL', default='redis://localhost:6379/0')
 CELERY_RESULT_BACKEND = 'django-db'
 CELERY_BEAT_SCHEDULE = {
     'Get currencies privat': {
@@ -33,15 +32,17 @@ LOGIN_REDIRECT_URL = 'catalog:home'
 LOGOUT_REDIRECT_URL = 'profiles:login'
 
 AUTH_USER_MODEL = 'profiles.User'
-AUTHENTICATION_BACKENDS = ["profiles.backends.EmailBackend", "profiles.backends.PhoneBackend"]
+AUTHENTICATION_BACKENDS = [
+    'profiles.backends.EmailBackend',
+    'profiles.backends.PhoneBackend'
+]
 
 CART_SESSION_ID = 'cart'
+
 DEFAULT_CURRENCY = 'UAH'
 
 PHONENUMBER_DB_FORMAT = 'INTERNATIONAL'
 PHONENUMBER_DEFAULT_REGION = 'UA'
-
-INTERNAL_IPS = config('INTERNAL_IPS', default='127.0.0.1', cast=Csv())
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -133,7 +134,7 @@ AUTH_PASSWORD_VALIDATORS = [
 CACHES = {
     "default": {
         "BACKEND": "django.core.cache.backends.redis.RedisCache",
-        "LOCATION": "redis://127.0.0.1:6379",
+        "LOCATION": "redis://redis:6379",
     }
 }
 

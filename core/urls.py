@@ -14,15 +14,17 @@ rest_urlpatterns = [
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('api/v1/', include(rest_urlpatterns)),
     path('cart/', include('cart.urls', namespace='cart')),
+    path('catalog/', include('catalog.urls', namespace='catalog')),
     path('contacts/', include('contacts.urls', namespace='contacts')),
     path('favorites/', include('favorites.urls', namespace='favorites')),
     path('orders/', include('orders.urls', namespace='orders')),
     path('profiles/', include('profiles.urls', namespace='profiles')),
     path('reviews/', include('reviews.urls', namespace='reviews')),
     path('tools/', include('tools.urls', namespace='exchange')),
-    path('api/v1/', include(rest_urlpatterns)),
-    path('catalog/', include('catalog.urls', namespace='catalog')),
+
+
 ]
 
 schema_view = get_schema_view(
